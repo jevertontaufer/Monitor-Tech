@@ -112,6 +112,9 @@
   .fair-col h3{font-family:var(--display);font-size:1.05rem;font-weight:600;margin-bottom:0.65rem;display:flex;align-items:center;gap:8px}
   .fair-col h3 .flag{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:2px 6px}
   .fair-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:0.6rem}
+  .fair-legend{display:flex;gap:0.9rem;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:0.02em;color:var(--faint);margin:-0.6rem 0 1.1rem}
+  .fair-legend span{display:flex;align-items:center;gap:5px}
+  .fair-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
   .fair{display:flex;gap:0.7rem;padding:0.7rem 0.85rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);align-items:flex-start}
   a.fair{text-decoration:none;color:inherit;cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
   a.fair:hover{background:var(--panel-2);border-color:var(--line-2);transform:translateY(-2px)}
@@ -119,6 +122,10 @@
   a.fair:focus-visible{outline:2px solid var(--hot);outline-offset:-2px}
   .fair .go{font-family:var(--mono);font-size:13px;color:var(--faint);align-self:center;margin-left:auto;padding-left:0.4rem;flex:none;transition:color .15s}
   a.fair:hover .go{color:var(--phosphor)}
+  .fair .fdot{width:8px;height:8px;border-radius:50%;flex:none;margin-top:6px}
+  .fair .fdot.up{background:#3FB950}
+  .fair .fdot.now{background:#4C8DFF}
+  .fair .fdot.past{background:var(--hot);opacity:.7}
   .fair .when{font-family:var(--mono);font-size:11px;color:var(--phosphor);min-width:74px;line-height:1.35;padding-top:1px}
   .fair .body{flex:1;min-width:0}
   .fair .nm{font-size:0.92rem;font-weight:500;color:var(--text);line-height:1.25}
@@ -175,13 +182,13 @@
 <header class="top">
   <div class="wrap top-row">
     <div>
-      <div class="eyebrow"> </div>
-      <h1>Observatório de Tecnologia Global </h1>
+      <div class="eyebrow">Radar de tecnologia · panorama global</div>
+      <h1>Tecnologia global e onde o setor está acelerando</h1>
     </div>
     <div class="clock-box">
       <div class="lbl">Hora atual (local)</div>
       <div id="clock">—</div>
-      <div class="rev"> </div>
+      <div class="rev">Revisão dos dados: 18 jun 2026</div>
     </div>
   </div>
 </header>
@@ -197,7 +204,12 @@
 
   <section class="sec" id="feiras">
     <div class="sec-head"><h2>Feiras de tecnologia</h2><span class="count" id="fair-count"></span></div>
-    <p class="sec-intro">Calendário de 2026 (e próximas edições já confirmadas). </p>
+    <p class="sec-intro">Calendário de 2026. </p>
+    <div class="fair-legend">
+      <span><i style="background:#3FB950"></i>vão ocorrer</span>
+      <span><i style="background:#4C8DFF"></i>acontecendo agora</span>
+      <span><i style="background:#E5252A;opacity:.7"></i>encerradas</span>
+    </div>
     <div class="fairs" id="fairs"></div>
   </section>
 
@@ -331,6 +343,7 @@ function renderFairs(list,el){
     row.title='Abrir site de '+f.nm;
     const dispYr=(f.disp.match(/20\d\d/))?'':yr(f.s);
     row.innerHTML=
+      '<span class="fdot '+f.st.k+'" aria-hidden="true"></span>'+
       '<div class="when">'+esc(f.disp)+esc(dispYr)+'</div>'+
       '<div class="body"><div class="nm">'+esc(f.nm)+'</div>'+
         '<div class="meta">'+esc(f.loc)+' · <span class="area">'+esc(f.area)+'</span></div>'+
