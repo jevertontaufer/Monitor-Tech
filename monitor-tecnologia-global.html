@@ -545,7 +545,7 @@ if('serviceWorker' in navigator){window.addEventListener('load',function(){navig
   fcountry.addEventListener('change',render);
 
   function showCatalog(){catalog.hidden=false;render();}
-  document.getElementById('sup-cat').addEventListener('click',showCatalog);
+  document.getElementById('sup-cat').addEventListener('click',function(){if(catalog.hidden){catalog.hidden=false;render();}else{catalog.hidden=true;}});
   q.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();showCatalog();}});
 
   function matches(s){
