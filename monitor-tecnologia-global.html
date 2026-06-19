@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitor de Tecnologia Global — Áreas, Mercados e Feiras</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0A0B; --panel:#141416; --panel-2:#1C1C1F; --panel-3:#27272B;
+    --line:rgba(255,255,255,0.09); --line-2:rgba(255,255,255,0.16);
+    --text:#F2F2F3; --muted:#9A9AA0; --faint:#646469;
+    --hot:#E5252A; --grow:#F2F2F3; --emerg:#86868C;
+    --phosphor:#E5252A;
+    --radius:10px;
+    --display:'Space Grotesk',sans-serif; --mono:'IBM Plex Mono',monospace; --body:'Inter',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--ink);color:var(--text);font-family:var(--body);line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:4rem}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 1.25rem}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--faint)}
+  a{color:inherit}
+  ::selection{background:var(--hot);color:#fff}
+
+  header.top{border-bottom:1px solid var(--line);background:linear-gradient(180deg,#0E1219 0%,var(--ink) 100%);padding:1.5rem 0 1.25rem}
+  .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:1.5rem;flex-wrap:wrap}
+  h1{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,3.4vw,2.4rem);line-height:1.05;letter-spacing:-0.01em}
+  h1 .em{color:var(--phosphor)}
+  .clock-box{text-align:right;font-family:var(--mono);min-width:200px}
+  .clock-box .lbl{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--faint)}
+  #clock{font-size:1.05rem;color:var(--text);font-weight:500}
+  .clock-box .rev{font-size:11px;color:var(--muted);margin-top:0.45rem}
+
+  .pulse{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+  .pulse .cell{background:var(--ink);padding:1.1rem 1.25rem}
+  .pulse .k{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint)}
+  .pulse .v{font-family:var(--display);font-size:1.7rem;font-weight:600;margin-top:0.25rem;line-height:1}
+  .pulse .v small{font-size:0.8rem;color:var(--muted);font-weight:400;font-family:var(--body)}
+  .pulse .note{font-size:11px;color:var(--muted);margin-top:0.35rem}
+  .pulse .v.teal{color:var(--grow)} .pulse .v.orange{color:var(--hot)}
+  .sec{padding-top:2.4rem}
+  .sec-head{display:flex;align-items:baseline;gap:0.75rem;margin-bottom:1.1rem;flex-wrap:wrap}
+  .sec-head h2{font-family:var(--display);font-weight:600;font-size:1.35rem;letter-spacing:-0.01em}
+  .sec-head .count{font-family:var(--mono);font-size:12px;color:var(--phosphor)}
+  .sec-intro{color:var(--muted);font-size:0.9rem;max-width:75ch;margin:-0.4rem 0 1.2rem}
+
+  .legend{display:flex;gap:1.1rem;flex-wrap:wrap;font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:1.1rem}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .dot{width:9px;height:9px;border-radius:50%}
+  .dot.hot{background:var(--hot)} .dot.grow{background:var(--grow)} .dot.emerg{background:var(--emerg)}
+  .dot.cat-green{background:#3FB950} .dot.cat-yellow{background:#E3B341} .dot.cat-blue{background:#4C8DFF}
+
+  .inds{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:0.7rem}
+  .ind{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.8rem 0.9rem;cursor:pointer;transition:border-color .15s,transform .15s;font-family:var(--body);width:100%}
+  .ind:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .ind:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+  .ind-top{display:flex;align-items:center;gap:7px;margin-bottom:0.5rem}
+  .ind-dot{width:8px;height:8px;border-radius:50%;flex:none}
+  .ind-dot.cat-green{background:#3FB950} .ind-dot.cat-yellow{background:#E3B341} .ind-dot.cat-blue{background:#4C8DFF}
+  .ind-name{font-family:var(--display);font-weight:600;font-size:0.92rem;line-height:1.15;color:var(--text)}
+  .ind-val{font-family:var(--display);font-weight:600;font-size:1.25rem;line-height:1;color:var(--text)}
+  .ind-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.02em;color:var(--faint);margin-top:0.35rem;line-height:1.4}
+
+  .esc{display:flex;flex-direction:column;gap:0.5rem}
+  .esc-row{display:flex;align-items:center;gap:0.9rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.7rem 0.95rem;text-decoration:none;transition:border-color .15s,transform .15s;flex-wrap:wrap}
+  .esc-row:hover{border-color:var(--line-2);transform:translateX(3px)}
+  .esc-row:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+  .esc-head{display:flex;align-items:center;gap:8px;min-width:250px;flex:0 0 auto}
+  .esc-name{font-family:var(--display);font-weight:600;font-size:0.95rem;color:var(--text)}
+  .esc-stat{font-family:var(--mono);font-size:10px;color:var(--faint)}
+  .esc-bar-wrap{flex:1;min-width:120px;height:10px;background:rgba(255,255,255,0.07);border-radius:6px;overflow:hidden}
+  .esc-bar{height:100%;border-radius:6px;width:0;transition:width .7s ease}
+  .esc-val{font-family:var(--mono);font-size:12px;color:var(--text);min-width:104px;text-align:right}
+  .esc-go{font-family:var(--mono);font-size:13px;color:var(--hot)}
+  .esc-axis{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:0.5rem}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0.9rem}
+  .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.05rem 1.1rem 1rem 1.35rem;overflow:hidden;transition:border-color .15s,transform .15s}
+  .card:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .card .stripe{position:absolute;left:0;top:0;bottom:0;width:4px}
+  .stripe.hot{background:var(--hot)} .stripe.grow{background:var(--grow)} .stripe.emerg{background:var(--emerg)}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:0.6rem}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.05rem;letter-spacing:-0.01em;line-height:1.2}
+  .tag{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap;padding-top:3px}
+  .stat{font-family:var(--display);font-weight:600;font-size:1.9rem;line-height:1;margin-top:0.85rem}
+  .stat.hot{color:var(--hot)} .stat.grow{color:var(--grow)} .stat.emerg{color:var(--emerg)}
+  .stat-lbl{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:0.35rem;letter-spacing:0.02em}
+  .driver{font-size:0.86rem;color:var(--muted);margin-top:0.7rem}
+  .src{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:0.55rem}
+  .card-actions{margin-top:0.85rem;display:flex;gap:0.5rem;flex-wrap:wrap}
+  .btn{font-family:var(--mono);font-size:11px;letter-spacing:0.04em;text-transform:uppercase;background:transparent;border:1px solid var(--line-2);border-radius:6px;color:var(--text);padding:0.4rem 0.7rem;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+  .btn:hover{background:var(--panel-3);border-color:var(--line)}
+  .btn.primary{border-color:var(--phosphor);color:var(--phosphor)}
+  .btn.primary:hover{background:rgba(229,37,42,0.12)}
+  .card-news{margin-top:0.85rem;border-top:1px solid var(--line);padding-top:0.7rem}
+  .cn-head{font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);margin-bottom:0.55rem;display:flex;align-items:center;gap:6px}
+  .cn-live{width:6px;height:6px;border-radius:50%;background:var(--hot);animation:ping 2s infinite;flex:none}
+  .cn-item{display:block;text-decoration:none;margin-bottom:0.6rem}
+  .cn-item:last-child{margin-bottom:0}
+  .cn-title{font-size:0.82rem;color:var(--text);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .cn-item:hover .cn-title{color:var(--phosphor)}
+  .cn-meta{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:2px}
+  .cn-empty{font-size:0.8rem;color:var(--faint);line-height:1.4}
+  .cn-empty a{color:var(--phosphor)}
+
+  /* fairs two-column */
+  .fairs{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+  .fair-col{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.4rem 0}
+  .fair-col h3{font-family:var(--display);font-size:1.05rem;font-weight:600;padding:0.9rem 1.1rem 0.5rem;display:flex;align-items:center;gap:8px}
+  .fair-col h3 .flag{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:2px 6px}
+  .fair{display:flex;gap:0.85rem;padding:0.7rem 1.1rem;border-top:1px solid var(--line);align-items:flex-start}
+  .fair .when{font-family:var(--mono);font-size:11px;color:var(--phosphor);min-width:74px;line-height:1.35;padding-top:1px}
+  .fair .body{flex:1;min-width:0}
+  .fair .nm{font-size:0.92rem;font-weight:500;color:var(--text);line-height:1.25}
+  .fair .meta{font-size:0.78rem;color:var(--muted);margin-top:2px}
+  .fair .meta .area{color:var(--faint)}
+  .pill{font-family:var(--mono);font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;margin-top:3px;display:inline-block}
+  .pill.up{background:rgba(255,255,255,0.10);color:#d2d2d6}
+  .pill.now{background:rgba(229,37,42,0.20);color:#ff7a7d}
+  .pill.past{background:var(--panel-3);color:var(--faint)}
+
+  /* feed + auto-refresh (mesmo padrão do monitor de conflitos) */
+  .feed-status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted);margin-bottom:0.9rem}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--hot);animation:ping 2s infinite}
+  .live-dot.err{background:var(--hot);animation:none}
+  .live-dot.load{background:var(--muted);animation:ping 1s infinite}
+  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(229,37,42,0.5)}70%{box-shadow:0 0 0 7px rgba(229,37,42,0)}100%{box-shadow:0 0 0 0 rgba(229,37,42,0)}}
+  .refresh-bar{display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.7rem 0.95rem;margin-bottom:0.9rem}
+  .rb-group{display:flex;align-items:center;gap:0.5rem}
+  .rb-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint)}
+  .rb-sel{background:var(--panel-2);border:1px solid var(--line-2);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:11px;padding:0.35rem 0.5rem;cursor:pointer}
+  #countdown{font-family:var(--mono);font-size:12px;color:var(--phosphor);min-width:42px;text-align:center}
+  .rb-spacer{flex:1}
+  #last-upd{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .btn.sm{padding:0.35rem 0.6rem}.btn.paused{border-color:var(--muted);color:var(--muted)}
+  /* cotação em tempo real */
+  .fx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0.9rem}
+  .fx-card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem 1.2rem;transition:border-color .15s,transform .15s}
+  .fx-card:hover{border-color:var(--line-2);transform:translateY(-2px)}
+  .fx-top{display:flex;justify-content:space-between;align-items:flex-start;gap:0.6rem}
+  .fx-pair{font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+  .fx-pair .fx-arrow{color:var(--faint)}
+  .fx-chg{font-family:var(--mono);font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+  .fx-chg.up{color:#3FB950;background:rgba(63,185,80,0.12)}
+  .fx-chg.down{color:var(--hot);background:rgba(229,37,42,0.14)}
+  .fx-chg.flat{color:var(--muted);background:rgba(255,255,255,0.06)}
+  .fx-val{font-family:var(--display);font-weight:700;font-size:2rem;line-height:1;margin-top:0.7rem;letter-spacing:-0.01em}
+  .fx-sub{display:flex;gap:1.3rem;margin-top:0.6rem;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .fx-sub b{color:var(--text);font-weight:600}
+  .fx-range{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:0.55rem}
+
+  footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1.6rem}
+  footer h4{font-family:var(--display);font-size:0.95rem;margin-bottom:0.5rem}
+  footer p{font-size:0.82rem;color:var(--muted);max-width:80ch;margin-bottom:0.7rem}
+  footer .srcs{font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.9}
+  .disclaimer{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--hot);border-radius:0 var(--radius) var(--radius) 0;padding:0.9rem 1.1rem;margin-bottom:1.4rem}
+  .disclaimer strong{color:var(--hot);font-weight:600}
+
+  @media (max-width:680px){ .fairs{grid-template-columns:1fr} .grid{grid-template-columns:1fr} .clock-box{text-align:left} }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto} }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-row">
+    <div>
+      <div class="eyebrow">Monitor de tecnologia · cenário global</div>
+      <h1>Tecnologia global e onde o setor está acelerando</h1>
+    </div>
+    <div class="clock-box">
+      <div class="lbl">Hora atual (local)</div>
+      <div id="clock">—</div>
+      <div class="rev">Revisão dos dados: 18 jun 2026</div>
+    </div>
+  </div>
+</header>
+
+<section class="pulse">
+  <div class="cell"><div class="k">Automação com IA</div><div class="v teal">US$ 169 bi <small>2026</small></div><div class="note">Mercado global · Grand View</div></div>
+  <div class="cell"><div class="k">IA industrial</div><div class="v orange">US$ 13,7 bi <small>2026</small></div><div class="note">Crescendo ~51% ao ano · TBRC</div></div>
+  <div class="cell"><div class="k">Robôs em operação</div><div class="v">4,28 mi</div><div class="note">Estoque global instalado · IFR</div></div>
+  <div class="cell"><div class="k">Novas instalações na Ásia</div><div class="v">70%</div><div class="note">Da implantação mundial · IFR</div></div>
+</section>
+
+<main class="wrap">
+
+  <section class="sec" id="feiras">
+    <div class="sec-head"><h2>Feiras de tecnologia</h2><span class="count" id="fair-count"></span></div>
+    <p class="sec-intro">Calendário de 2026 (e próximas edições já confirmadas). </p>
+    <div class="fairs">
+      <div class="fair-col"><h3>Mundo <span class="flag">global</span></h3><div id="fairs-world"></div></div>
+      <div class="fair-col"><h3>Brasil <span class="flag">br</span></h3><div id="fairs-brazil"></div></div>
+    </div>
+  </section>
+
+  <section class="sec" id="areas">
+    <div class="sec-head"><h2>Áreas da tecnologia</h2><span class="count" id="area-count"></span></div>
+    <div class="legend">
+      <span><span class="dot cat-green"></span>Alta tração</span>
+      <span><span class="dot cat-yellow"></span>Em expansão</span>
+      <span><span class="dot cat-blue"></span>Emergente</span>
+    </div>
+    
+    <div class="esc" id="area-grid"></div>
+    <div class="esc-axis" id="area-axis"></div>
+  </section>
+
+  <section class="sec" id="cotacao">
+    <div class="sec-head"><h2>Cotação em tempo real</h2><span class="count" id="fx-count">USD · EUR · BRL</span></div>
+    <p class="sec-intro"> </p>
+    <div class="fx-grid" id="fx-grid"></div>
+  </section>
+
+  <footer>
+  
+    <h4>Fontes consultadas</h4>
+    <p class="srcs">
+      Mercados: Grand View Research · The Business Research Company (TBRC) · Global Market Insights · MarketsandMarkets · Federação Internacional de Robótica (IFR). Feiras: sites oficiais e organizadores (CES, GSMA/MWC, Hannover Messe, Mesago/SPS, COMPUTEX, IFA, GITEX, ABIMAQ/Informa Markets, South Summit Brazil, Web Summit Rio, Febraban Tech, Futurecom, Gramado Summit) e agregadores (Showmetech, ACATE, Startups.com.br, CIMM).
+    </p>
+  </footer>
+
+</main>
+
+<script>
+/* ---------- relógio ---------- */
+function tick(){
+  const f=new Intl.DateTimeFormat('pt-BR',{weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('clock').textContent=f.format(new Date());
+}
+tick();setInterval(tick,1000);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ---------- áreas ---------- */
+const AREAS=[
+  {n:"Inteligência artificial",heat:"hot",stat:"US$ 169 bi",g:31,est:false,gq:"inteligência artificial",
+   q:'"inteligência artificial" OR "IA generativa"'},
+  {n:"Automação industrial",heat:"hot",stat:"US$ 13,7 bi",g:51,est:false,gq:"automação industrial",
+   q:'"automação industrial" OR "indústria 4.0"'},
+  {n:"Robótica & cobots",heat:"grow",stat:"4,28 mi robôs",g:7,est:false,gq:"robótica industrial",
+   q:'robótica OR cobots OR "robôs industriais"'},
+  {n:"Physical AI & humanoides",heat:"emerg",stat:"US$ 1,5 bi",g:47,est:false,gq:"robôs humanoides",
+   q:'"robôs humanoides" OR humanoide OR "robô humanoide"'},
+  {n:"Semicondutores & chips de IA",heat:"hot",stat:"Gargalo nº 1",g:30,est:true,gq:"semicondutores chips IA",
+   q:'semicondutores OR chips OR Nvidia'},
+  {n:"Nuvem & data centers",heat:"hot",stat:"Boom de capex",g:22,est:true,gq:"data center nuvem",
+   q:'"data center" OR "data centers" OR "computação em nuvem"'},
+  {n:"Cibersegurança",heat:"grow",stat:"US$ 6,3 bi",g:25,est:true,gq:"cibersegurança",
+   q:'cibersegurança OR "ataque hacker" OR ransomware'},
+];
+const CAT={hot:"cat-green",grow:"cat-yellow",emerg:"cat-blue"};
+const CATCOLOR={hot:"#3FB950",grow:"#E3B341",emerg:"#4C8DFF"};
+const ag=document.getElementById('area-grid');
+const ranked=[...AREAS].sort((a,b)=>b.g-a.g);
+const maxG=Math.max(...ranked.map(a=>a.g));
+ranked.forEach(a=>{
+  const gn=(a.est?'~':'')+a.g+'%/ano'+(a.est?' (est.)':'');
+  const url='https://news.google.com/search?q='+encodeURIComponent(a.gq)+'&hl=pt-BR&gl=BR&ceid=BR:pt-419';
+  const el=document.createElement('a');el.className='esc-row';el.href=url;el.target='_blank';el.rel='noopener';
+  el.title='Abrir notícias de '+a.n+' no Google News (Brasil)';
+  el.innerHTML='<div class="esc-head"><span class="dot '+CAT[a.heat]+'"></span><span class="esc-name">'+esc(a.n)+'</span><span class="esc-stat">'+esc(a.stat)+'</span></div>'+
+    '<div class="esc-bar-wrap"><div class="esc-bar" data-w="'+Math.round(a.g/maxG*100)+'" style="background:'+CATCOLOR[a.heat]+'"></div></div>'+
+    '<span class="esc-val">'+esc(gn)+'</span><span class="esc-go">↗</span>';
+  ag.appendChild(el);
+});
+requestAnimationFrame(()=>ag.querySelectorAll('.esc-bar').forEach(b=>{b.style.width=b.dataset.w+'%';}));
+document.getElementById('area-count').textContent='7 áreas · ritmo de crescimento';
+
+
+/* ---------- feiras ---------- */
+const FAIRS_WORLD=[
+  {nm:"CES",disp:"6–9 jan",s:"2026-01-06",e:"2026-01-09",loc:"Las Vegas, EUA",area:"Eletrônicos de consumo & IA"},
+  {nm:"MWC Barcelona",disp:"2–5 mar",s:"2026-03-02",e:"2026-03-05",loc:"Barcelona, Espanha",area:"Móvel, 5G/6G, IA"},
+  {nm:"GDC",disp:"9–13 mar",s:"2026-03-09",e:"2026-03-13",loc:"San Francisco, EUA",area:"Games & desenvolvimento"},
+  {nm:"Canton Fair (1ª fase)",disp:"a partir de 15 abr",s:"2026-04-15",e:"2026-04-19",loc:"Guangzhou, China",area:"Multissetorial & eletrônica"},
+  {nm:"Hannover Messe",disp:"20–24 abr",s:"2026-04-20",e:"2026-04-24",loc:"Hannover, Alemanha",area:"Automação industrial"},
+  {nm:"Google I/O",disp:"19–20 mai",s:"2026-05-19",e:"2026-05-20",loc:"Mountain View, EUA",area:"IA & desenvolvimento"},
+  {nm:"COMPUTEX",disp:"2–5 jun",s:"2026-06-02",e:"2026-06-05",loc:"Taipei, Taiwan",area:"Hardware, chips, IA"},
+  {nm:"IFA Berlin",disp:"4–8 set",s:"2026-09-04",e:"2026-09-08",loc:"Berlim, Alemanha",area:"Eletrônicos de consumo"},
+  {nm:"TechCrunch Disrupt",disp:"set",s:"2026-09-15",e:"2026-09-17",loc:"San Francisco, EUA",area:"Startups & venture capital"},
+  {nm:"Canton Fair (2ª fase)",disp:"a partir de 15 out",s:"2026-10-15",e:"2026-10-19",loc:"Guangzhou, China",area:"Multissetorial & eletrônica"},
+  {nm:"SPS – Smart Production Solutions",disp:"24–26 nov",s:"2026-11-24",e:"2026-11-26",loc:"Nuremberg, Alemanha",area:"Automação inteligente"},
+  {nm:"Slush",disp:"fim de nov",s:"2026-11-30",e:"2026-12-01",loc:"Helsinque, Finlândia",area:"Startups & deep tech"},
+  {nm:"GITEX Global",disp:"7–11 dez",s:"2026-12-07",e:"2026-12-11",loc:"Dubai, EAU",area:"IA, cibersegurança, startups"},
+];
+const FAIRS_BR=[
+  {nm:"South Summit Brazil",disp:"25–27 mar",s:"2026-03-25",e:"2026-03-27",loc:"Porto Alegre, RS",area:"Startups & venture capital"},
+  {nm:"Smart City Expo Curitiba",disp:"25–27 mar",s:"2026-03-25",e:"2026-03-27",loc:"Curitiba, PR",area:"Cidades inteligentes"},
+  {nm:"Digital Tech Show / AI Innovation Show",disp:"5–6 mai",s:"2026-05-05",e:"2026-05-06",loc:"São Paulo, SP",area:"IA & TI corporativa"},
+  {nm:"FEIMEC",disp:"5–9 mai",s:"2026-05-05",e:"2026-05-09",loc:"São Paulo, SP",area:"Máquinas & automação (bienal · próx. 2028)"},
+  {nm:"Gramado Summit",disp:"6–8 mai",s:"2026-05-06",e:"2026-05-08",loc:"Gramado, RS",area:"Inovação & empreendedorismo"},
+  {nm:"AI Festival (StartSe)",disp:"13–14 mai",s:"2026-05-13",e:"2026-05-14",loc:"São Paulo, SP",area:"IA para negócios"},
+  {nm:"Web Summit Rio",disp:"8–11 jun",s:"2026-06-08",e:"2026-06-11",loc:"Rio de Janeiro, RJ",area:"Tecnologia & IA (próx. ed. jun/2027)"},
+  {nm:"Fispal Tecnologia",disp:"16–19 jun",s:"2026-06-16",e:"2026-06-19",loc:"São Paulo, SP",area:"Automação de alimentos & bebidas"},
+  {nm:"Febraban Tech",disp:"24–26 ago",s:"2026-08-24",e:"2026-08-26",loc:"São Paulo, SP",area:"Tecnologia financeira"},
+  {nm:"Futurecom",disp:"6–8 out",s:"2026-10-06",e:"2026-10-08",loc:"São Paulo, SP",area:"Conectividade, IA, infra digital"},
+  {nm:"Big Data & AI Brazil Experience",disp:"22 nov",s:"2026-11-22",e:"2026-11-22",loc:"São Paulo, SP",area:"Big data & IA"},
+  {nm:"EXPOMAFE",disp:"4–8 mai 2027",s:"2027-05-04",e:"2027-05-08",loc:"São Paulo, SP",area:"Máquinas-ferramenta & automação"},
+];
+
+function fairStatus(s,e){
+  const now=new Date();now.setHours(0,0,0,0);
+  const start=new Date(s+'T00:00:00'),end=new Date((e||s)+'T23:59:59');
+  if(now>end)return{k:'past',t:'edição encerrada'};
+  if(now>=start&&now<=end)return{k:'now',t:'acontecendo agora'};
+  const days=Math.ceil((start-now)/86400000);
+  return{k:'up',t:days===0?'começa hoje':('em '+days+(days===1?' dia':' dias'))};
+}
+function yr(s){return s.slice(0,4)!=='2026'?(' '+s.slice(0,4)):'';}
+function renderFairs(list,el){
+  const enriched=list.map(f=>({...f,st:fairStatus(f.s,f.e)}));
+  enriched.sort((a,b)=>{
+    const au=a.st.k!=='past',bu=b.st.k!=='past';
+    if(au!==bu)return au?-1:1;
+    return au?(a.s<b.s?-1:1):(a.s>b.s?-1:1);
+  });
+  el.innerHTML='';
+  enriched.forEach(f=>{
+    const row=document.createElement('div');row.className='fair';
+    const dispYr=(f.disp.match(/20\d\d/))?'':yr(f.s);
+    row.innerHTML=
+      '<div class="when">'+esc(f.disp)+esc(dispYr)+'</div>'+
+      '<div class="body"><div class="nm">'+esc(f.nm)+'</div>'+
+        '<div class="meta">'+esc(f.loc)+' · <span class="area">'+esc(f.area)+'</span></div>'+
+        '<span class="pill '+f.st.k+'">'+esc(f.st.t)+'</span></div>';
+    el.appendChild(row);
+  });
+}
+renderFairs(FAIRS_WORLD,document.getElementById('fairs-world'));
+renderFairs(FAIRS_BR,document.getElementById('fairs-brazil'));
+document.getElementById('fair-count').textContent=(FAIRS_WORLD.length+FAIRS_BR.length)+' eventos · mundo + Brasil';
+
+/* ---------- cotação em tempo real (USD/BRL, EUR/BRL, EUR/USD) ---------- */
+const FX_API='https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,EUR-USD';
+const FX_PAIRS=[
+  {key:'USDBRL',label:'Dólar americano',sub:'USD / BRL',symbol:'R$'},
+  {key:'EURBRL',label:'Euro',sub:'EUR / BRL',symbol:'R$'},
+  {key:'EURUSD',label:'Euro em dólar',sub:'EUR / USD',symbol:'US$'}
+];
+
+const fxGrid=document.getElementById('fx-grid');
+const intervalSec=30;
+
+function fmtN(v,dec){return Number(v).toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec});}
+
+function renderFx(data){
+  fxGrid.innerHTML='';
+  FX_PAIRS.forEach(p=>{
+    const d=data[p.key];if(!d)return;
+    const chg=parseFloat(d.pctChange)||0,bid=parseFloat(d.bid),ask=parseFloat(d.ask),low=parseFloat(d.low),high=parseFloat(d.high);
+    const cls=chg>0.01?'up':chg<-0.01?'down':'flat';
+    const arrow=cls==='up'?'▲':cls==='down'?'▼':'→';
+    const el=document.createElement('div');el.className='fx-card';
+    el.innerHTML=
+      '<div class="fx-top"><span class="fx-pair">'+esc(p.label)+' <span class="fx-arrow">·</span> '+esc(p.sub)+'</span>'+
+      '<span class="fx-chg '+cls+'">'+arrow+' '+(chg>=0?'+':'')+chg.toFixed(2)+'%</span></div>'+
+      '<div class="fx-val">'+esc(p.symbol)+' '+fmtN(bid,4)+'</div>'+
+      '<div class="fx-sub"><span>Compra <b>'+esc(p.symbol)+' '+fmtN(bid,4)+'</b></span><span>Venda <b>'+esc(p.symbol)+' '+fmtN(ask,4)+'</b></span></div>'+
+      '<div class="fx-range">Mín '+fmtN(low,4)+' · Máx '+fmtN(high,4)+' (dia)</div>';
+    fxGrid.appendChild(el);
+  });
+}
+
+async function fetchFx(){
+  try{
+    const c=new AbortController();const t=setTimeout(()=>c.abort(),9000);
+    const r=await fetch(FX_API,{signal:c.signal});clearTimeout(t);
+    if(!r.ok)throw 0;
+    const data=await r.json();
+    renderFx(data);
+  }catch(e){}
+}
+function fmtCd(s){return s+'s';}
+setInterval(fetchFx,intervalSec*1000);
+fetchFx();
+</script>
+</body>
+</html>
+</script>
+</body>
+</html>

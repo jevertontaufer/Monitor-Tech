@@ -1,0 +1,14 @@
+{
+  "name": "monitor-tecnologia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monitor de Tecnologia Global — feiras, áreas e notícias ao vivo em pt-BR",
+  "type": "module",
+  "main": "tech-server.js",
+  "scripts": {
+    "start": "node tech-server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
