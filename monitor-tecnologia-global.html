@@ -212,6 +212,14 @@
   .sup-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.04em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:1px 5px;margin-left:7px;white-space:nowrap}
   .sup-contact{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:5px}
   .sup-nmrow{display:flex;align-items:center;flex-wrap:wrap}
+  .sup-addbtn{font-size:16px;font-weight:700;line-height:1;padding:0.45rem 0.8rem}
+  .sup-form{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1.2rem}
+  .sup-form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.6rem}
+  .sup-form-grid .sup-input,.sup-form-grid .sup-sel{width:100%;min-width:0}
+  .sup-form-btns{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem}
+  .sup-filters{align-items:center;margin-bottom:1rem}
+  .sup-remove{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:7px;cursor:pointer;display:inline-block}
+  .sup-remove:hover{color:var(--hot)}
 </style>
 </head>
 <body>
@@ -263,39 +271,41 @@
   </section>
 
     <section class="sec" id="fornecedores">
-    <div class="sec-head"><h2>Fornecedores de tecnologia</h2><span class="count">busca + exemplos</span></div>
-    <p class="sec-intro">Digite o que procura (ex.: "paletização autônoma", "visão computacional", "AGV/AMR") e busque fornecedores e fabricantes. A opção "No mapa" é a melhor para achar empresas com telefone e endereço.</p>
+    <div class="sec-head"><h2>Fornecedores de tecnologia</h2></div>
     <div class="sup-tool">
       <div class="sup-row">
         <input id="sup-q" class="sup-input" type="text" placeholder="O que você procura? ex.: paletização autônoma" autocomplete="off">
-        <select id="sup-country" class="sup-sel" aria-label="País">
-          <option value="">Qualquer país</option>
-          <option value="Brasil">Brasil</option>
-          <option value="Estados Unidos">Estados Unidos</option>
-          <option value="Alemanha">Alemanha</option>
-          <option value="Itália">Itália</option>
-          <option value="China">China</option>
-          <option value="Japão">Japão</option>
-          <option value="perto de mim">Perto de mim</option>
-        </select>
-      </div>
-      <div class="sup-btns">
-        <button class="btn primary" type="button" data-eng="web">Buscar fornecedores</button>
-        <button class="btn" type="button" data-eng="b2b">Diretórios B2B</button>
-        <button class="btn" type="button" data-eng="maps">No mapa (com contato)</button>
-      </div>
-      <div class="sup-chips" id="sup-chips"></div>
-      <div class="sup-note">Abre em nova aba (Google, Google Maps e diretórios como Europages, DirectIndustry, ThomasNet, Kompass). Para telefone/e-mail, use "No mapa" ou o site de cada fornecedor.</div>
-    </div>
-    <div class="sup-sub"><h3>Fornecedores por categoria</h3><span id="sup-cnt"></span></div>
-    <div class="sup-filters">
-      <div class="sup-cats" id="sup-cats"></div>
-      <div class="sup-row" style="margin-top:0.55rem">
-        <select id="sup-fcountry" class="sup-sel" aria-label="Filtrar por país"></select>
-        <input id="sup-ftext" class="sup-input" type="text" placeholder="Filtrar por nome…" autocomplete="off" style="min-width:160px">
+        <button class="btn" type="button" id="sup-web">Buscar na web</button>
+        <button class="btn primary" type="button" id="sup-cat">Catálogo interno</button>
+        <button class="btn sup-addbtn" type="button" id="sup-add" title="Incluir fornecedor" aria-label="Incluir fornecedor">+</button>
       </div>
     </div>
-    <div class="sup-list" id="sup-list"></div>
+
+    <div class="sup-form" id="sup-form" hidden>
+      <div class="sup-form-grid">
+        <input id="f-nm" class="sup-input" type="text" placeholder="Nome do fornecedor *" autocomplete="off">
+        <input id="f-pais" class="sup-input" type="text" placeholder="País *" autocomplete="off">
+        <select id="f-cat" class="sup-sel" aria-label="Categoria"></select>
+        <input id="f-site" class="sup-input" type="text" placeholder="Site (https://...) *" autocomplete="off">
+        <input id="f-tag" class="sup-input" type="text" placeholder="Descrição curta" autocomplete="off">
+        <input id="f-contato" class="sup-input" type="text" placeholder="Contato (telefone/e-mail) — opcional" autocomplete="off">
+      </div>
+      <div class="sup-form-btns">
+        <button class="btn primary" type="button" id="f-save">Salvar</button>
+        <button class="btn" type="button" id="f-copy">Copiar código p/ fornecedores.js</button>
+        <button class="btn" type="button" id="f-cancel">Cancelar</button>
+      </div>
+      <div class="sup-note" id="f-msg">Salvo só neste navegador. Para publicar para todos, cole o código gerado no arquivo fornecedores.js.</div>
+    </div>
+
+    <div class="sup-catalog" id="sup-catalog" hidden>
+      <div class="sup-row sup-filters">
+        <select id="sup-fcat" class="sup-sel" aria-label="Categoria"></select>
+        <select id="sup-fcountry" class="sup-sel" aria-label="País"></select>
+        <span class="count" id="sup-cnt"></span>
+      </div>
+      <div class="sup-list" id="sup-list"></div>
+    </div>
   </section>
 
   <section class="sec" id="cotacao">
@@ -505,74 +515,44 @@ if('serviceWorker' in navigator){window.addEventListener('load',function(){navig
 <script>
 (function(){
   var q=document.getElementById('sup-q');
-  var cs=document.getElementById('sup-country');
   if(!q) return;
-
-  /* ---- buscador livre (qualquer termo) ---- */
-  function go(eng){
-    var term=(q.value||'').trim();
-    if(!term){q.focus();return;}
-    var cname=cs.value||'';
-    var enc=encodeURIComponent, url;
-    if(eng==='maps'){
-      url='https://www.google.com/maps/search/'+enc(term+' fornecedor'+(cname?(' '+cname):''));
-    }else if(eng==='b2b'){
-      var dirs='(site:europages.com OR site:directindustry.com OR site:thomasnet.com OR site:kompass.com OR site:made-in-china.com OR site:indiamart.com)';
-      url='https://www.google.com/search?hl=pt-BR&q='+enc(term+' (fornecedor OR fabricante OR supplier OR distribuidor) '+(cname?cname+' ':'')+dirs);
-    }else{
-      url='https://www.google.com/search?hl=pt-BR&q='+enc(term+' fornecedores fabricantes'+(cname?(' '+cname):''));
-    }
-    window.open(url,'_blank','noopener');
-  }
-  var btns=document.querySelectorAll('#fornecedores .sup-btns .btn');
-  for(var i=0;i<btns.length;i++){(function(b){b.addEventListener('click',function(){go(b.getAttribute('data-eng'));});})(btns[i]);}
-  q.addEventListener('keydown',function(e){if(e.key==='Enter')go('web');});
-  var chips=['paletização autônoma','paletizadora robótica','visão computacional','AGV / AMR logístico','cobot (robô colaborativo)','automação industrial'];
-  var cw=document.getElementById('sup-chips');
-  chips.forEach(function(c){var b=document.createElement('button');b.className='sup-chip';b.type='button';b.textContent=c;b.addEventListener('click',function(){q.value=c;q.focus();});cw.appendChild(b);});
-
-  /* ---- diretório curado (vem de fornecedores.js) ---- */
   var CATS=window.CATEGORIAS||{};
-  var SUP=window.SUPPLIERS||[];
+  var BASE=window.SUPPLIERS||[];
+  var LSK='otg_sup_user_v1';
+  function loadUser(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
+  function saveUser(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function all(){return BASE.concat(loadUser());}
   var esc2=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
-  function clean(u){var s=u.replace('https://','').replace('http://',''); if(s.slice(-1)==='/') s=s.slice(0,-1); return s;}
+  function clean(u){var s=String(u).replace('https://','').replace('http://','');if(s.slice(-1)==='/')s=s.slice(0,-1);return s;}
 
-  var state={cat:'',country:'',text:''};
+  document.getElementById('sup-web').addEventListener('click',function(){
+    var t=(q.value||'').trim();if(!t){q.focus();return;}
+    window.open('https://www.google.com/search?hl=pt-BR&q='+encodeURIComponent(t+' fornecedores fabricantes'),'_blank','noopener');
+  });
 
-  // chips de categoria
-  var catWrap=document.getElementById('sup-cats');
-  function addCat(key,label){
-    var b=document.createElement('button');b.type='button';b.className='sup-cat'+(state.cat===key?' active':'');
-    b.textContent=label;b.setAttribute('data-cat',key);
-    b.addEventListener('click',function(){state.cat=key;render();syncCats();});
-    catWrap.appendChild(b);
-  }
-  function syncCats(){var all=catWrap.querySelectorAll('.sup-cat');for(var i=0;i<all.length;i++){all[i].classList.toggle('active',all[i].getAttribute('data-cat')===state.cat);}}
-  if(SUP.length){
-    addCat('','Todas');
-    Object.keys(CATS).forEach(function(k){
-      if(SUP.some(function(s){return (s.cats||[]).indexOf(k)>=0;})) addCat(k,CATS[k]);
-    });
-  }
-
-  // select de país
-  var fc=document.getElementById('sup-fcountry');
-  if(fc){
-    var countries=[];SUP.forEach(function(s){if(s.pais&&countries.indexOf(s.pais)<0)countries.push(s.pais);});
-    countries.sort(function(a,b){if(a==='Brasil')return -1;if(b==='Brasil')return 1;return a.localeCompare(b,'pt-BR');});
-    var opt=document.createElement('option');opt.value='';opt.textContent='Todos os países';fc.appendChild(opt);
-    countries.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;fc.appendChild(o);});
-    fc.addEventListener('change',function(){state.country=fc.value;render();});
-  }
-  var ft=document.getElementById('sup-ftext');
-  if(ft) ft.addEventListener('input',function(){state.text=ft.value.toLowerCase().trim();render();});
-
+  var catalog=document.getElementById('sup-catalog');
   var list=document.getElementById('sup-list');
   var cnt=document.getElementById('sup-cnt');
+  var fcat=document.getElementById('sup-fcat');
+  var fcountry=document.getElementById('sup-fcountry');
+
+  function fillSelect(sel,opts,first){sel.innerHTML='';var o0=document.createElement('option');o0.value='';o0.textContent=first;sel.appendChild(o0);opts.forEach(function(o){var e=document.createElement('option');e.value=o.v;e.textContent=o.t;sel.appendChild(e);});}
+  function catOpts(){return Object.keys(CATS).map(function(k){return {v:k,t:CATS[k]};});}
+  function countryOpts(){var cs=[];all().forEach(function(s){if(s.pais&&cs.indexOf(s.pais)<0)cs.push(s.pais);});cs.sort(function(a,b){if(a==='Brasil')return -1;if(b==='Brasil')return 1;return a.localeCompare(b,'pt-BR');});return cs.map(function(c){return {v:c,t:c};});}
+  fillSelect(fcat,catOpts(),'Todas as categorias');
+  fillSelect(fcountry,countryOpts(),'Todos os países');
+  fcat.addEventListener('change',render);
+  fcountry.addEventListener('change',render);
+
+  function showCatalog(){catalog.hidden=false;render();}
+  document.getElementById('sup-cat').addEventListener('click',showCatalog);
+  q.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();showCatalog();}});
+
   function matches(s){
-    if(state.cat && (s.cats||[]).indexOf(state.cat)<0) return false;
-    if(state.country && s.pais!==state.country) return false;
-    if(state.text){var hay=(s.nm+' '+(s.tag||'')+' '+(s.pais||'')).toLowerCase();if(hay.indexOf(state.text)<0)return false;}
+    var t=(q.value||'').toLowerCase().trim();
+    if(fcat.value && (s.cats||[]).indexOf(fcat.value)<0) return false;
+    if(fcountry.value && s.pais!==fcountry.value) return false;
+    if(t){var hay=(s.nm+' '+(s.tag||'')+' '+(s.pais||'')).toLowerCase();if(hay.indexOf(t)<0)return false;}
     return true;
   }
   function card(s){
@@ -581,36 +561,69 @@ if('serviceWorker' in navigator){window.addEventListener('load',function(){navig
              '<div class="sup-tag">'+esc2(s.tag||'')+'</div>'+
              '<div class="sup-site">↗ '+esc2(clean(s.url))+'</div>';
     if(s.contato) html+='<div class="sup-contact">'+esc2(s.contato)+'</div>';
-    a.innerHTML=html;return a;
+    a.innerHTML=html;
+    if(s._user){var r=document.createElement('span');r.className='sup-remove';r.textContent='✕ remover';r.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var u=loadUser().filter(function(x){return x.id!==s.id;});saveUser(u);fillSelect(fcountry,countryOpts(),'Todos os países');render();});a.appendChild(r);}
+    return a;
   }
   function render(){
+    var data=all().filter(matches);
     list.innerHTML='';
-    var data=SUP.filter(matches);
     if(cnt) cnt.textContent=data.length+' fornecedor'+(data.length===1?'':'es');
-    if(!data.length){var p=document.createElement('div');p.className='sup-note';p.textContent=SUP.length?'Nenhum fornecedor com esses filtros.':'Adicione fornecedores no arquivo fornecedores.js.';list.appendChild(p);return;}
-    // agrupa por categoria (na ordem de CATEGORIAS); se uma categoria está selecionada, só ela
-    var keys=state.cat?[state.cat]:Object.keys(CATS);
-    var shown={};
+    if(!data.length){var p=document.createElement('div');p.className='sup-note';p.textContent='Nenhum fornecedor com esses filtros.';list.appendChild(p);return;}
+    var keys=fcat.value?[fcat.value]:Object.keys(CATS);
     keys.forEach(function(k){
       var items=data.filter(function(s){return (s.cats||[]).indexOf(k)>=0;});
       if(!items.length) return;
       var wrap=document.createElement('div');wrap.className='sup-cty';
-      var hh=document.createElement('h4');hh.innerHTML=esc2(CATS[k]||k)+' <span class="flag">'+items.length+'</span>';
-      wrap.appendChild(hh);
-      var g=document.createElement('div');g.className='sup-grid';
-      items.forEach(function(s){g.appendChild(card(s));shown[s.nm]=1;});
+      var hh=document.createElement('h4');hh.innerHTML=esc2(CATS[k]||k)+' <span class="flag">'+items.length+'</span>';wrap.appendChild(hh);
+      var g=document.createElement('div');g.className='sup-grid';items.forEach(function(s){g.appendChild(card(s));});
       wrap.appendChild(g);list.appendChild(wrap);
     });
-    // itens sem categoria conhecida
-    var rest=data.filter(function(s){return !(s.cats||[]).some(function(c){return CATS[c];});});
-    if(rest.length && !state.cat){
-      var wrap=document.createElement('div');wrap.className='sup-cty';
-      var hh=document.createElement('h4');hh.innerHTML='Outros <span class="flag">'+rest.length+'</span>';
-      wrap.appendChild(hh);var g=document.createElement('div');g.className='sup-grid';
-      rest.forEach(function(s){g.appendChild(card(s));});wrap.appendChild(g);list.appendChild(wrap);
+    if(!fcat.value){
+      var rest=data.filter(function(s){return !(s.cats||[]).some(function(c){return CATS[c];});});
+      if(rest.length){var wrap=document.createElement('div');wrap.className='sup-cty';var hh=document.createElement('h4');hh.innerHTML='Outros <span class="flag">'+rest.length+'</span>';wrap.appendChild(hh);var g=document.createElement('div');g.className='sup-grid';rest.forEach(function(s){g.appendChild(card(s));});wrap.appendChild(g);list.appendChild(wrap);}
     }
   }
-  render();
+
+  /* incluir fornecedor */
+  var form=document.getElementById('sup-form');
+  var fcatForm=document.getElementById('f-cat');
+  fillSelect(fcatForm,catOpts(),'Categoria…');
+  document.getElementById('sup-add').addEventListener('click',function(){form.hidden=!form.hidden;});
+  document.getElementById('f-cancel').addEventListener('click',function(){form.hidden=true;});
+  function readForm(){return {
+    nm:(document.getElementById('f-nm').value||'').trim(),
+    pais:(document.getElementById('f-pais').value||'').trim(),
+    cat:fcatForm.value,
+    site:(document.getElementById('f-site').value||'').trim(),
+    tag:(document.getElementById('f-tag').value||'').trim(),
+    contato:(document.getElementById('f-contato').value||'').trim()
+  };}
+  function msg(t){document.getElementById('f-msg').textContent=t;}
+  function norm(u){return /^https?:\/\//.test(u)?u:('https://'+u);}
+  document.getElementById('f-save').addEventListener('click',function(){
+    var d=readForm();
+    if(!d.nm||!d.site){msg('Preencha ao menos Nome e Site.');return;}
+    var obj={id:'u'+Date.now(),nm:d.nm,pais:d.pais,cats:d.cat?[d.cat]:[],tag:d.tag,url:norm(d.site),contato:d.contato,_user:true};
+    var u=loadUser();u.push(obj);saveUser(u);
+    ['f-nm','f-pais','f-site','f-tag','f-contato'].forEach(function(id){document.getElementById(id).value='';});
+    fcatForm.value='';
+    fillSelect(fcountry,countryOpts(),'Todos os países');
+    form.hidden=true;showCatalog();
+    msg('Fornecedor adicionado (salvo neste navegador).');
+  });
+  document.getElementById('f-copy').addEventListener('click',function(){
+    var d=readForm();
+    if(!d.nm||!d.site){msg('Preencha ao menos Nome e Site para gerar o código.');return;}
+    function q2(s){return '"'+String(s).replace(/"/g,'\\"')+'"';}
+    var line='  {nm:'+q2(d.nm)+', pais:'+q2(d.pais)+', cats:['+(d.cat?q2(d.cat):'')+'], tag:'+q2(d.tag)+', url:'+q2(norm(d.site))+', contato:'+q2(d.contato)+'},';
+    copyText(line);
+  });
+  function copyText(t){
+    function ok(){msg('Código copiado! Cole dentro de window.SUPPLIERS, no fornecedores.js.');}
+    function fb(){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok();}catch(e){msg('Copie manualmente: '+t);}document.body.removeChild(ta);}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fb);}else{fb();}
+  }
 })();
 </script>
 
