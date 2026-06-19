@@ -106,14 +106,15 @@
   .cn-empty{font-size:0.8rem;color:var(--faint);line-height:1.4}
   .cn-empty a{color:var(--phosphor)}
 
-  /* fairs two-column */
-  .fairs{columns:2;column-gap:1.1rem}
-  .fair-col{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.4rem 0;break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:1.1rem;width:100%}
-  .fair-col h3{font-family:var(--display);font-size:1.05rem;font-weight:600;padding:0.9rem 1.1rem 0.5rem;display:flex;align-items:center;gap:8px}
+  /* fairs · faixas por continente + grade de cartões */
+  .fairs{display:flex;flex-direction:column;gap:1.4rem}
+  .fair-col{background:transparent;border:0;padding:0}
+  .fair-col h3{font-family:var(--display);font-size:1.05rem;font-weight:600;margin-bottom:0.65rem;display:flex;align-items:center;gap:8px}
   .fair-col h3 .flag{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:2px 6px}
-  .fair{display:flex;gap:0.85rem;padding:0.7rem 1.1rem;border-top:1px solid var(--line);align-items:flex-start}
-  a.fair{text-decoration:none;color:inherit;cursor:pointer;transition:background .15s}
-  a.fair:hover{background:var(--panel-2)}
+  .fair-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:0.6rem}
+  .fair{display:flex;gap:0.7rem;padding:0.7rem 0.85rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);align-items:flex-start}
+  a.fair{text-decoration:none;color:inherit;cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
+  a.fair:hover{background:var(--panel-2);border-color:var(--line-2);transform:translateY(-2px)}
   a.fair:hover .nm{color:var(--phosphor)}
   a.fair:focus-visible{outline:2px solid var(--hot);outline-offset:-2px}
   .fair .go{font-family:var(--mono);font-size:13px;color:var(--faint);align-self:center;margin-left:auto;padding-left:0.4rem;flex:none;transition:color .15s}
@@ -165,7 +166,7 @@
   .disclaimer{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--hot);border-radius:0 var(--radius) var(--radius) 0;padding:0.9rem 1.1rem;margin-bottom:1.4rem}
   .disclaimer strong{color:var(--hot);font-weight:600}
 
-  @media (max-width:680px){ .fairs{columns:1} .grid{grid-template-columns:1fr} .clock-box{text-align:left} }
+  @media (max-width:680px){ .grid{grid-template-columns:1fr} .clock-box{text-align:left} }
   @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto} }
 </style>
 </head>
@@ -362,7 +363,7 @@ CONT_ORDER.forEach(cont=>{
   const head=document.createElement('h3');
   head.innerHTML=esc(cont)+' <span class="flag">'+items.length+(items.length===1?' evento':' eventos')+'</span>';
   col.appendChild(head);
-  const body=document.createElement('div');
+  const body=document.createElement('div');body.className='fair-list';
   col.appendChild(body);
   renderFairs(items,body);
   fairsEl.appendChild(col);
