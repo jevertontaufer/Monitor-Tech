@@ -112,6 +112,12 @@
   .fair-col h3{font-family:var(--display);font-size:1.05rem;font-weight:600;padding:0.9rem 1.1rem 0.5rem;display:flex;align-items:center;gap:8px}
   .fair-col h3 .flag{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:2px 6px}
   .fair{display:flex;gap:0.85rem;padding:0.7rem 1.1rem;border-top:1px solid var(--line);align-items:flex-start}
+  a.fair{text-decoration:none;color:inherit;cursor:pointer;transition:background .15s}
+  a.fair:hover{background:var(--panel-2)}
+  a.fair:hover .nm{color:var(--phosphor)}
+  a.fair:focus-visible{outline:2px solid var(--hot);outline-offset:-2px}
+  .fair .go{font-family:var(--mono);font-size:13px;color:var(--faint);align-self:center;margin-left:auto;padding-left:0.4rem;flex:none;transition:color .15s}
+  a.fair:hover .go{color:var(--phosphor)}
   .fair .when{font-family:var(--mono);font-size:11px;color:var(--phosphor);min-width:74px;line-height:1.35;padding-top:1px}
   .fair .body{flex:1;min-width:0}
   .fair .nm{font-size:0.92rem;font-weight:500;color:var(--text);line-height:1.25}
@@ -272,33 +278,33 @@ document.getElementById('area-count').textContent='7 áreas · ritmo de crescime
 
 /* ---------- feiras ---------- */
 const FAIRS_WORLD=[
-  {nm:"CES",disp:"6–9 jan",s:"2026-01-06",e:"2026-01-09",loc:"Las Vegas, EUA",area:"Eletrônicos de consumo & IA"},
-  {nm:"MWC Barcelona",disp:"2–5 mar",s:"2026-03-02",e:"2026-03-05",loc:"Barcelona, Espanha",area:"Móvel, 5G/6G, IA"},
-  {nm:"GDC",disp:"9–13 mar",s:"2026-03-09",e:"2026-03-13",loc:"San Francisco, EUA",area:"Games & desenvolvimento"},
-  {nm:"Canton Fair (1ª fase)",disp:"a partir de 15 abr",s:"2026-04-15",e:"2026-04-19",loc:"Guangzhou, China",area:"Multissetorial & eletrônica"},
-  {nm:"Hannover Messe",disp:"20–24 abr",s:"2026-04-20",e:"2026-04-24",loc:"Hannover, Alemanha",area:"Automação industrial"},
-  {nm:"Google I/O",disp:"19–20 mai",s:"2026-05-19",e:"2026-05-20",loc:"Mountain View, EUA",area:"IA & desenvolvimento"},
-  {nm:"COMPUTEX",disp:"2–5 jun",s:"2026-06-02",e:"2026-06-05",loc:"Taipei, Taiwan",area:"Hardware, chips, IA"},
-  {nm:"IFA Berlin",disp:"4–8 set",s:"2026-09-04",e:"2026-09-08",loc:"Berlim, Alemanha",area:"Eletrônicos de consumo"},
-  {nm:"TechCrunch Disrupt",disp:"set",s:"2026-09-15",e:"2026-09-17",loc:"San Francisco, EUA",area:"Startups & venture capital"},
-  {nm:"Canton Fair (2ª fase)",disp:"a partir de 15 out",s:"2026-10-15",e:"2026-10-19",loc:"Guangzhou, China",area:"Multissetorial & eletrônica"},
-  {nm:"SPS – Smart Production Solutions",disp:"24–26 nov",s:"2026-11-24",e:"2026-11-26",loc:"Nuremberg, Alemanha",area:"Automação inteligente"},
-  {nm:"Slush",disp:"fim de nov",s:"2026-11-30",e:"2026-12-01",loc:"Helsinque, Finlândia",area:"Startups & deep tech"},
-  {nm:"GITEX Global",disp:"7–11 dez",s:"2026-12-07",e:"2026-12-11",loc:"Dubai, EAU",area:"IA, cibersegurança, startups"},
+  {nm:"CES",disp:"6–9 jan",s:"2026-01-06",e:"2026-01-09",loc:"Las Vegas, EUA",area:"Eletrônicos de consumo & IA",url:"https://www.ces.tech"},
+  {nm:"MWC Barcelona",disp:"2–5 mar",s:"2026-03-02",e:"2026-03-05",loc:"Barcelona, Espanha",area:"Móvel, 5G/6G, IA",url:"https://www.mwcbarcelona.com"},
+  {nm:"GDC",disp:"9–13 mar",s:"2026-03-09",e:"2026-03-13",loc:"San Francisco, EUA",area:"Games & desenvolvimento",url:"https://gdconf.com"},
+  {nm:"Canton Fair (1ª fase)",disp:"a partir de 15 abr",s:"2026-04-15",e:"2026-04-19",loc:"Guangzhou, China",area:"Multissetorial & eletrônica",url:"https://www.cantonfair.org.cn/en-US"},
+  {nm:"Hannover Messe",disp:"20–24 abr",s:"2026-04-20",e:"2026-04-24",loc:"Hannover, Alemanha",area:"Automação industrial",url:"https://www.hannovermesse.de/en"},
+  {nm:"Google I/O",disp:"19–20 mai",s:"2026-05-19",e:"2026-05-20",loc:"Mountain View, EUA",area:"IA & desenvolvimento",url:"https://io.google"},
+  {nm:"COMPUTEX",disp:"2–5 jun",s:"2026-06-02",e:"2026-06-05",loc:"Taipei, Taiwan",area:"Hardware, chips, IA",url:"https://www.computextaipei.com.tw/en"},
+  {nm:"IFA Berlin",disp:"4–8 set",s:"2026-09-04",e:"2026-09-08",loc:"Berlim, Alemanha",area:"Eletrônicos de consumo",url:"https://www.ifa-berlin.com"},
+  {nm:"TechCrunch Disrupt",disp:"set",s:"2026-09-15",e:"2026-09-17",loc:"San Francisco, EUA",area:"Startups & venture capital",url:"https://techcrunch.com/events/"},
+  {nm:"Canton Fair (2ª fase)",disp:"a partir de 15 out",s:"2026-10-15",e:"2026-10-19",loc:"Guangzhou, China",area:"Multissetorial & eletrônica",url:"https://www.cantonfair.org.cn/en-US"},
+  {nm:"SPS – Smart Production Solutions",disp:"24–26 nov",s:"2026-11-24",e:"2026-11-26",loc:"Nuremberg, Alemanha",area:"Automação inteligente",url:"https://sps.mesago.com/nuernberg/en.html"},
+  {nm:"Slush",disp:"fim de nov",s:"2026-11-30",e:"2026-12-01",loc:"Helsinque, Finlândia",area:"Startups & deep tech",url:"https://slush.org"},
+  {nm:"GITEX Global",disp:"7–11 dez",s:"2026-12-07",e:"2026-12-11",loc:"Dubai, EAU",area:"IA, cibersegurança, startups",url:"https://www.gitex.com"},
 ];
 const FAIRS_BR=[
-  {nm:"South Summit Brazil",disp:"25–27 mar",s:"2026-03-25",e:"2026-03-27",loc:"Porto Alegre, RS",area:"Startups & venture capital"},
-  {nm:"Smart City Expo Curitiba",disp:"25–27 mar",s:"2026-03-25",e:"2026-03-27",loc:"Curitiba, PR",area:"Cidades inteligentes"},
-  {nm:"Digital Tech Show / AI Innovation Show",disp:"5–6 mai",s:"2026-05-05",e:"2026-05-06",loc:"São Paulo, SP",area:"IA & TI corporativa"},
-  {nm:"FEIMEC",disp:"5–9 mai",s:"2026-05-05",e:"2026-05-09",loc:"São Paulo, SP",area:"Máquinas & automação (bienal · próx. 2028)"},
-  {nm:"Gramado Summit",disp:"6–8 mai",s:"2026-05-06",e:"2026-05-08",loc:"Gramado, RS",area:"Inovação & empreendedorismo"},
-  {nm:"AI Festival (StartSe)",disp:"13–14 mai",s:"2026-05-13",e:"2026-05-14",loc:"São Paulo, SP",area:"IA para negócios"},
-  {nm:"Web Summit Rio",disp:"8–11 jun",s:"2026-06-08",e:"2026-06-11",loc:"Rio de Janeiro, RJ",area:"Tecnologia & IA (próx. ed. jun/2027)"},
-  {nm:"Fispal Tecnologia",disp:"16–19 jun",s:"2026-06-16",e:"2026-06-19",loc:"São Paulo, SP",area:"Automação de alimentos & bebidas"},
-  {nm:"Febraban Tech",disp:"24–26 ago",s:"2026-08-24",e:"2026-08-26",loc:"São Paulo, SP",area:"Tecnologia financeira"},
-  {nm:"Futurecom",disp:"6–8 out",s:"2026-10-06",e:"2026-10-08",loc:"São Paulo, SP",area:"Conectividade, IA, infra digital"},
+  {nm:"South Summit Brazil",disp:"25–27 mar",s:"2026-03-25",e:"2026-03-27",loc:"Porto Alegre, RS",area:"Startups & venture capital",url:"https://www.southsummit.io/brazil"},
+  {nm:"Smart City Expo Curitiba",disp:"25–27 mar",s:"2026-03-25",e:"2026-03-27",loc:"Curitiba, PR",area:"Cidades inteligentes",url:"https://smartcityexpocuritiba.com"},
+  {nm:"Digital Tech Show / AI Innovation Show",disp:"5–6 mai",s:"2026-05-05",e:"2026-05-06",loc:"São Paulo, SP",area:"IA & TI corporativa",url:"https://iimainfo.com.br/digital-tech-show/"},
+  {nm:"FEIMEC",disp:"5–9 mai",s:"2026-05-05",e:"2026-05-09",loc:"São Paulo, SP",area:"Máquinas & automação (bienal · próx. 2028)",url:"https://www.feimec.com.br"},
+  {nm:"Gramado Summit",disp:"6–8 mai",s:"2026-05-06",e:"2026-05-08",loc:"Gramado, RS",area:"Inovação & empreendedorismo",url:"https://gramadosummit.com"},
+  {nm:"AI Festival (StartSe)",disp:"13–14 mai",s:"2026-05-13",e:"2026-05-14",loc:"São Paulo, SP",area:"IA para negócios",url:"https://pages.startse.com/ai-festival"},
+  {nm:"Web Summit Rio",disp:"8–11 jun",s:"2026-06-08",e:"2026-06-11",loc:"Rio de Janeiro, RJ",area:"Tecnologia & IA (próx. ed. jun/2027)",url:"https://rio.websummit.com"},
+  {nm:"Fispal Tecnologia",disp:"16–19 jun",s:"2026-06-16",e:"2026-06-19",loc:"São Paulo, SP",area:"Automação de alimentos & bebidas",url:"https://www.fispaltecnologia.com.br"},
+  {nm:"Febraban Tech",disp:"24–26 ago",s:"2026-08-24",e:"2026-08-26",loc:"São Paulo, SP",area:"Tecnologia financeira",url:"https://febrabantech.febraban.org.br"},
+  {nm:"Futurecom",disp:"6–8 out",s:"2026-10-06",e:"2026-10-08",loc:"São Paulo, SP",area:"Conectividade, IA, infra digital",url:"https://www.futurecom.com.br"},
   {nm:"Big Data & AI Brazil Experience",disp:"22 nov",s:"2026-11-22",e:"2026-11-22",loc:"São Paulo, SP",area:"Big data & IA"},
-  {nm:"EXPOMAFE",disp:"4–8 mai 2027",s:"2027-05-04",e:"2027-05-08",loc:"São Paulo, SP",area:"Máquinas-ferramenta & automação"},
+  {nm:"EXPOMAFE",disp:"4–8 mai 2027",s:"2027-05-04",e:"2027-05-08",loc:"São Paulo, SP",area:"Máquinas-ferramenta & automação",url:"https://www.expomafe.com.br"},
 ];
 
 function fairStatus(s,e){
@@ -310,6 +316,9 @@ function fairStatus(s,e){
   return{k:'up',t:days===0?'começa hoje':('em '+days+(days===1?' dia':' dias'))};
 }
 function yr(s){return s.slice(0,4)!=='2026'?(' '+s.slice(0,4)):'';}
+function fairUrl(f){
+  return f.url || ('https://www.google.com/search?q='+encodeURIComponent(f.nm+' '+f.loc));
+}
 function renderFairs(list,el){
   const enriched=list.map(f=>({...f,st:fairStatus(f.s,f.e)}));
   enriched.sort((a,b)=>{
@@ -319,13 +328,16 @@ function renderFairs(list,el){
   });
   el.innerHTML='';
   enriched.forEach(f=>{
-    const row=document.createElement('div');row.className='fair';
+    const row=document.createElement('a');row.className='fair';
+    row.href=fairUrl(f);row.target='_blank';row.rel='noopener';
+    row.title='Abrir site de '+f.nm;
     const dispYr=(f.disp.match(/20\d\d/))?'':yr(f.s);
     row.innerHTML=
       '<div class="when">'+esc(f.disp)+esc(dispYr)+'</div>'+
       '<div class="body"><div class="nm">'+esc(f.nm)+'</div>'+
         '<div class="meta">'+esc(f.loc)+' · <span class="area">'+esc(f.area)+'</span></div>'+
-        '<span class="pill '+f.st.k+'">'+esc(f.st.t)+'</span></div>';
+        '<span class="pill '+f.st.k+'">'+esc(f.st.t)+'</span></div>'+
+      '<div class="go">↗</div>';
     el.appendChild(row);
   });
 }
