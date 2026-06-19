@@ -179,6 +179,39 @@
 
   @media (max-width:680px){ .grid{grid-template-columns:1fr} .clock-box{text-align:left} }
   @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto} }
+  /* fornecedores */
+  .sup-tool{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1.2rem}
+  .sup-row{display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center}
+  .sup-input{flex:1;min-width:220px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--text);font-family:var(--body);font-size:0.95rem;padding:0.7rem 0.85rem}
+  .sup-input::placeholder{color:var(--faint)}
+  .sup-input:focus{outline:2px solid var(--hot);outline-offset:1px}
+  .sup-sel{background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:12px;padding:0.72rem 0.6rem;cursor:pointer}
+  .sup-btns{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.7rem}
+  .sup-chips{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.75rem}
+  .sup-chip{font-family:var(--mono);font-size:10.5px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:3px 9px;cursor:pointer;transition:all .15s}
+  .sup-chip:hover{border-color:var(--line-2);color:var(--text)}
+  .sup-note{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:0.75rem;line-height:1.55}
+  .sup-sub{display:flex;align-items:baseline;gap:0.6rem;flex-wrap:wrap;margin:1.4rem 0 0.9rem}
+  .sup-sub h3{font-family:var(--display);font-size:1.05rem;font-weight:600}
+  .sup-sub span{font-family:var(--mono);font-size:11px;color:var(--phosphor)}
+  .sup-list{display:flex;flex-direction:column;gap:1.1rem}
+  .sup-cty h4{font-family:var(--display);font-size:0.98rem;font-weight:600;margin-bottom:0.55rem;display:flex;align-items:center;gap:8px}
+  .sup-cty h4 .flag{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:2px 6px}
+  .sup-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:0.6rem}
+  .sup-card{display:block;text-decoration:none;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.7rem 0.85rem;transition:background .15s,border-color .15s,transform .15s}
+  .sup-card:hover{background:var(--panel-2);border-color:var(--line-2);transform:translateY(-2px)}
+  .sup-nm{font-family:var(--display);font-weight:600;font-size:0.92rem;color:var(--text)}
+  .sup-card:hover .sup-nm{color:var(--phosphor)}
+  .sup-tag{font-size:0.78rem;color:var(--muted);margin-top:3px;line-height:1.3}
+  .sup-site{font-family:var(--mono);font-size:10.5px;color:var(--phosphor);margin-top:6px;word-break:break-all}
+  .sup-filters{margin-bottom:1rem}
+  .sup-cats{display:flex;gap:0.4rem;flex-wrap:wrap}
+  .sup-cat{font-family:var(--mono);font-size:10.5px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer;transition:all .15s}
+  .sup-cat:hover{border-color:var(--line-2);color:var(--text)}
+  .sup-cat.active{background:rgba(229,37,42,0.14);border-color:var(--phosphor);color:var(--phosphor)}
+  .sup-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.04em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:1px 5px;margin-left:7px;white-space:nowrap}
+  .sup-contact{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:5px}
+  .sup-nmrow{display:flex;align-items:center;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -227,6 +260,42 @@
     
     <div class="esc" id="area-grid"></div>
     <div class="esc-axis" id="area-axis"></div>
+  </section>
+
+    <section class="sec" id="fornecedores">
+    <div class="sec-head"><h2>Fornecedores de tecnologia</h2><span class="count">busca + exemplos</span></div>
+    <p class="sec-intro">Digite o que procura (ex.: "paletização autônoma", "visão computacional", "AGV/AMR") e busque fornecedores e fabricantes. A opção "No mapa" é a melhor para achar empresas com telefone e endereço.</p>
+    <div class="sup-tool">
+      <div class="sup-row">
+        <input id="sup-q" class="sup-input" type="text" placeholder="O que você procura? ex.: paletização autônoma" autocomplete="off">
+        <select id="sup-country" class="sup-sel" aria-label="País">
+          <option value="">Qualquer país</option>
+          <option value="Brasil">Brasil</option>
+          <option value="Estados Unidos">Estados Unidos</option>
+          <option value="Alemanha">Alemanha</option>
+          <option value="Itália">Itália</option>
+          <option value="China">China</option>
+          <option value="Japão">Japão</option>
+          <option value="perto de mim">Perto de mim</option>
+        </select>
+      </div>
+      <div class="sup-btns">
+        <button class="btn primary" type="button" data-eng="web">Buscar fornecedores</button>
+        <button class="btn" type="button" data-eng="b2b">Diretórios B2B</button>
+        <button class="btn" type="button" data-eng="maps">No mapa (com contato)</button>
+      </div>
+      <div class="sup-chips" id="sup-chips"></div>
+      <div class="sup-note">Abre em nova aba (Google, Google Maps e diretórios como Europages, DirectIndustry, ThomasNet, Kompass). Para telefone/e-mail, use "No mapa" ou o site de cada fornecedor.</div>
+    </div>
+    <div class="sup-sub"><h3>Fornecedores por categoria</h3><span id="sup-cnt"></span></div>
+    <div class="sup-filters">
+      <div class="sup-cats" id="sup-cats"></div>
+      <div class="sup-row" style="margin-top:0.55rem">
+        <select id="sup-fcountry" class="sup-sel" aria-label="Filtrar por país"></select>
+        <input id="sup-ftext" class="sup-input" type="text" placeholder="Filtrar por nome…" autocomplete="off" style="min-width:160px">
+      </div>
+    </div>
+    <div class="sup-list" id="sup-list"></div>
   </section>
 
   <section class="sec" id="cotacao">
@@ -432,5 +501,118 @@ setInterval(fetchFx,intervalSec*1000);
 fetchFx();
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
 </script>
+<script src="fornecedores.js"></script>
+<script>
+(function(){
+  var q=document.getElementById('sup-q');
+  var cs=document.getElementById('sup-country');
+  if(!q) return;
+
+  /* ---- buscador livre (qualquer termo) ---- */
+  function go(eng){
+    var term=(q.value||'').trim();
+    if(!term){q.focus();return;}
+    var cname=cs.value||'';
+    var enc=encodeURIComponent, url;
+    if(eng==='maps'){
+      url='https://www.google.com/maps/search/'+enc(term+' fornecedor'+(cname?(' '+cname):''));
+    }else if(eng==='b2b'){
+      var dirs='(site:europages.com OR site:directindustry.com OR site:thomasnet.com OR site:kompass.com OR site:made-in-china.com OR site:indiamart.com)';
+      url='https://www.google.com/search?hl=pt-BR&q='+enc(term+' (fornecedor OR fabricante OR supplier OR distribuidor) '+(cname?cname+' ':'')+dirs);
+    }else{
+      url='https://www.google.com/search?hl=pt-BR&q='+enc(term+' fornecedores fabricantes'+(cname?(' '+cname):''));
+    }
+    window.open(url,'_blank','noopener');
+  }
+  var btns=document.querySelectorAll('#fornecedores .sup-btns .btn');
+  for(var i=0;i<btns.length;i++){(function(b){b.addEventListener('click',function(){go(b.getAttribute('data-eng'));});})(btns[i]);}
+  q.addEventListener('keydown',function(e){if(e.key==='Enter')go('web');});
+  var chips=['paletização autônoma','paletizadora robótica','visão computacional','AGV / AMR logístico','cobot (robô colaborativo)','automação industrial'];
+  var cw=document.getElementById('sup-chips');
+  chips.forEach(function(c){var b=document.createElement('button');b.className='sup-chip';b.type='button';b.textContent=c;b.addEventListener('click',function(){q.value=c;q.focus();});cw.appendChild(b);});
+
+  /* ---- diretório curado (vem de fornecedores.js) ---- */
+  var CATS=window.CATEGORIAS||{};
+  var SUP=window.SUPPLIERS||[];
+  var esc2=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+  function clean(u){var s=u.replace('https://','').replace('http://',''); if(s.slice(-1)==='/') s=s.slice(0,-1); return s;}
+
+  var state={cat:'',country:'',text:''};
+
+  // chips de categoria
+  var catWrap=document.getElementById('sup-cats');
+  function addCat(key,label){
+    var b=document.createElement('button');b.type='button';b.className='sup-cat'+(state.cat===key?' active':'');
+    b.textContent=label;b.setAttribute('data-cat',key);
+    b.addEventListener('click',function(){state.cat=key;render();syncCats();});
+    catWrap.appendChild(b);
+  }
+  function syncCats(){var all=catWrap.querySelectorAll('.sup-cat');for(var i=0;i<all.length;i++){all[i].classList.toggle('active',all[i].getAttribute('data-cat')===state.cat);}}
+  if(SUP.length){
+    addCat('','Todas');
+    Object.keys(CATS).forEach(function(k){
+      if(SUP.some(function(s){return (s.cats||[]).indexOf(k)>=0;})) addCat(k,CATS[k]);
+    });
+  }
+
+  // select de país
+  var fc=document.getElementById('sup-fcountry');
+  if(fc){
+    var countries=[];SUP.forEach(function(s){if(s.pais&&countries.indexOf(s.pais)<0)countries.push(s.pais);});
+    countries.sort(function(a,b){if(a==='Brasil')return -1;if(b==='Brasil')return 1;return a.localeCompare(b,'pt-BR');});
+    var opt=document.createElement('option');opt.value='';opt.textContent='Todos os países';fc.appendChild(opt);
+    countries.forEach(function(c){var o=document.createElement('option');o.value=c;o.textContent=c;fc.appendChild(o);});
+    fc.addEventListener('change',function(){state.country=fc.value;render();});
+  }
+  var ft=document.getElementById('sup-ftext');
+  if(ft) ft.addEventListener('input',function(){state.text=ft.value.toLowerCase().trim();render();});
+
+  var list=document.getElementById('sup-list');
+  var cnt=document.getElementById('sup-cnt');
+  function matches(s){
+    if(state.cat && (s.cats||[]).indexOf(state.cat)<0) return false;
+    if(state.country && s.pais!==state.country) return false;
+    if(state.text){var hay=(s.nm+' '+(s.tag||'')+' '+(s.pais||'')).toLowerCase();if(hay.indexOf(state.text)<0)return false;}
+    return true;
+  }
+  function card(s){
+    var a=document.createElement('a');a.className='sup-card';a.href=s.url;a.target='_blank';a.rel='noopener';
+    var html='<div class="sup-nmrow"><span class="sup-nm">'+esc2(s.nm)+'</span><span class="sup-badge">'+esc2(s.pais||'')+'</span></div>'+
+             '<div class="sup-tag">'+esc2(s.tag||'')+'</div>'+
+             '<div class="sup-site">↗ '+esc2(clean(s.url))+'</div>';
+    if(s.contato) html+='<div class="sup-contact">'+esc2(s.contato)+'</div>';
+    a.innerHTML=html;return a;
+  }
+  function render(){
+    list.innerHTML='';
+    var data=SUP.filter(matches);
+    if(cnt) cnt.textContent=data.length+' fornecedor'+(data.length===1?'':'es');
+    if(!data.length){var p=document.createElement('div');p.className='sup-note';p.textContent=SUP.length?'Nenhum fornecedor com esses filtros.':'Adicione fornecedores no arquivo fornecedores.js.';list.appendChild(p);return;}
+    // agrupa por categoria (na ordem de CATEGORIAS); se uma categoria está selecionada, só ela
+    var keys=state.cat?[state.cat]:Object.keys(CATS);
+    var shown={};
+    keys.forEach(function(k){
+      var items=data.filter(function(s){return (s.cats||[]).indexOf(k)>=0;});
+      if(!items.length) return;
+      var wrap=document.createElement('div');wrap.className='sup-cty';
+      var hh=document.createElement('h4');hh.innerHTML=esc2(CATS[k]||k)+' <span class="flag">'+items.length+'</span>';
+      wrap.appendChild(hh);
+      var g=document.createElement('div');g.className='sup-grid';
+      items.forEach(function(s){g.appendChild(card(s));shown[s.nm]=1;});
+      wrap.appendChild(g);list.appendChild(wrap);
+    });
+    // itens sem categoria conhecida
+    var rest=data.filter(function(s){return !(s.cats||[]).some(function(c){return CATS[c];});});
+    if(rest.length && !state.cat){
+      var wrap=document.createElement('div');wrap.className='sup-cty';
+      var hh=document.createElement('h4');hh.innerHTML='Outros <span class="flag">'+rest.length+'</span>';
+      wrap.appendChild(hh);var g=document.createElement('div');g.className='sup-grid';
+      rest.forEach(function(s){g.appendChild(card(s));});wrap.appendChild(g);list.appendChild(wrap);
+    }
+  }
+  render();
+})();
+</script>
+
 </body>
 </html>
