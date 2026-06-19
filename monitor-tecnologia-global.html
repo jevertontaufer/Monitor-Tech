@@ -107,8 +107,8 @@
   .cn-empty a{color:var(--phosphor)}
 
   /* fairs two-column */
-  .fairs{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
-  .fair-col{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.4rem 0}
+  .fairs{columns:2;column-gap:1.1rem}
+  .fair-col{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.4rem 0;break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:1.1rem;width:100%}
   .fair-col h3{font-family:var(--display);font-size:1.05rem;font-weight:600;padding:0.9rem 1.1rem 0.5rem;display:flex;align-items:center;gap:8px}
   .fair-col h3 .flag{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:2px 6px}
   .fair{display:flex;gap:0.85rem;padding:0.7rem 1.1rem;border-top:1px solid var(--line);align-items:flex-start}
@@ -165,7 +165,7 @@
   .disclaimer{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--hot);border-radius:0 var(--radius) var(--radius) 0;padding:0.9rem 1.1rem;margin-bottom:1.4rem}
   .disclaimer strong{color:var(--hot);font-weight:600}
 
-  @media (max-width:680px){ .fairs{grid-template-columns:1fr} .grid{grid-template-columns:1fr} .clock-box{text-align:left} }
+  @media (max-width:680px){ .fairs{columns:1} .grid{grid-template-columns:1fr} .clock-box{text-align:left} }
   @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto} }
 </style>
 </head>
@@ -197,10 +197,7 @@
   <section class="sec" id="feiras">
     <div class="sec-head"><h2>Feiras de tecnologia</h2><span class="count" id="fair-count"></span></div>
     <p class="sec-intro">Calendário de 2026 (e próximas edições já confirmadas). </p>
-    <div class="fairs">
-      <div class="fair-col"><h3>Mundo <span class="flag">global</span></h3><div id="fairs-world"></div></div>
-      <div class="fair-col"><h3>Brasil <span class="flag">br</span></h3><div id="fairs-brazil"></div></div>
-    </div>
+    <div class="fairs" id="fairs"></div>
   </section>
 
   <section class="sec" id="areas">
@@ -341,9 +338,36 @@ function renderFairs(list,el){
     el.appendChild(row);
   });
 }
-renderFairs(FAIRS_WORLD,document.getElementById('fairs-world'));
-renderFairs(FAIRS_BR,document.getElementById('fairs-brazil'));
-document.getElementById('fair-count').textContent=(FAIRS_WORLD.length+FAIRS_BR.length)+' eventos · mundo + Brasil';
+function continentOf(f){
+  if(f.cont)return f.cont;
+  const c=f.loc.split(',').pop().trim();
+  const EU=['Espanha','Alemanha','Finlândia','França','Reino Unido','Itália','Holanda','Países Baixos','Suíça','Portugal'];
+  const AS=['China','Taiwan','EAU','Japão','Coreia do Sul','Índia','Singapura','Hong Kong'];
+  const NA=['EUA','Canadá','México'];
+  if(EU.includes(c))return'Europa';
+  if(AS.includes(c))return'Ásia';
+  if(NA.includes(c))return'América do Norte';
+  return'América do Sul';
+}
+const ALL_FAIRS=[...FAIRS_WORLD,...FAIRS_BR];
+const CONT_ORDER=['América do Sul','América do Norte','Europa','Ásia'];
+const fairsEl=document.getElementById('fairs');
+fairsEl.innerHTML='';
+let contCount=0;
+CONT_ORDER.forEach(cont=>{
+  const items=ALL_FAIRS.filter(f=>continentOf(f)===cont);
+  if(!items.length)return;
+  contCount++;
+  const col=document.createElement('div');col.className='fair-col';
+  const head=document.createElement('h3');
+  head.innerHTML=esc(cont)+' <span class="flag">'+items.length+(items.length===1?' evento':' eventos')+'</span>';
+  col.appendChild(head);
+  const body=document.createElement('div');
+  col.appendChild(body);
+  renderFairs(items,body);
+  fairsEl.appendChild(col);
+});
+document.getElementById('fair-count').textContent=ALL_FAIRS.length+' eventos · '+contCount+' continentes';
 
 /* ---------- cotação em tempo real (USD/BRL, EUR/BRL, EUR/USD) ---------- */
 const FX_API='https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,EUR-USD';
