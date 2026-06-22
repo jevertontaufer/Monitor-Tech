@@ -3,8 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monitor de Tecnologia Global — Áreas, Mercados e Feiras</title>
+<title>Observatório de Tecnologia Global — Áreas, Mercados, Feiras e Fornecedores</title>
+<meta name="description" content="Observatório de tecnologia global: feiras de 2026 por continente, áreas em crescimento, fornecedores, notícias ao vivo e cotação em tempo real (USD, EUR, CNY).">
 <meta name="theme-color" content="#0A0A0B">
+<!-- Open Graph / compartilhamento -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Observatório de Tecnologia Global">
+<meta property="og:description" content="Feiras, mercados, fornecedores, notícias ao vivo e cotação em tempo real.">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2064%2064%27%3E%3Crect%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2714%27%20fill%3D%27%230A0A0B%27/%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2732%27%20r%3D%2722%27%20fill%3D%27none%27%20stroke%3D%27%23F2F2F3%27%20stroke-width%3D%272.6%27/%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2732%27%20r%3D%2712.5%27%20fill%3D%27none%27%20stroke%3D%27%239A9AA0%27%20stroke-width%3D%271.5%27%20opacity%3D%270.6%27/%3E%3Cpath%20d%3D%27M32%2032%20L32%2010%20A22%2022%200%200%201%2052.7%2024.6%20Z%27%20fill%3D%27%23E5252A%27/%3E%3Ccircle%20cx%3D%2732%27%20cy%3D%2732%27%20r%3D%273.3%27%20fill%3D%27%23E5252A%27/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
@@ -18,6 +25,7 @@
     --text:#F2F2F3; --muted:#9A9AA0; --faint:#646469;
     --hot:#E5252A; --grow:#F2F2F3; --emerg:#86868C;
     --phosphor:#E5252A;
+    --up:#3FB950; --down:#E5252A; --now:#4C8DFF; --warn:#E3B341;
     --radius:10px;
     --display:'Space Grotesk',sans-serif; --mono:'IBM Plex Mono',monospace; --body:'Inter',sans-serif;
   }
@@ -33,10 +41,16 @@
   .top-row{display:flex;justify-content:space-between;align-items:flex-start;gap:1.5rem;flex-wrap:wrap}
   h1{font-family:var(--display);font-weight:600;font-size:clamp(1.6rem,3.4vw,2.4rem);line-height:1.05;letter-spacing:-0.01em}
   h1 .em{color:var(--phosphor)}
+  .head-right{display:flex;flex-direction:column;align-items:flex-end;gap:0.7rem}
   .clock-box{text-align:right;font-family:var(--mono);min-width:200px}
   .clock-box .lbl{font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--faint)}
   #clock{font-size:1.05rem;color:var(--text);font-weight:500}
   .clock-box .rev{font-size:11px;color:var(--muted);margin-top:0.45rem}
+  /* seletor de idioma */
+  .lang-switch{display:flex;gap:2px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;padding:2px}
+  .lang-switch button{font-family:var(--mono);font-size:11px;letter-spacing:0.04em;background:transparent;border:0;color:var(--muted);padding:0.3rem 0.6rem;border-radius:6px;cursor:pointer;transition:all .15s}
+  .lang-switch button:hover{color:var(--text)}
+  .lang-switch button[aria-pressed="true"]{background:var(--phosphor);color:#fff}
 
   .pulse{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
   .pulse .cell{background:var(--ink);padding:1.1rem 1.25rem}
@@ -44,12 +58,15 @@
   .pulse .v{font-family:var(--display);font-size:1.7rem;font-weight:600;margin-top:0.25rem;line-height:1}
   .pulse .v small{font-size:0.8rem;color:var(--muted);font-weight:400;font-family:var(--body)}
   .pulse .note{font-size:11px;color:var(--muted);margin-top:0.35rem}
+  .pulse .ver{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:0.3rem;letter-spacing:0.02em}
   .pulse .v.teal{color:var(--grow)} .pulse .v.orange{color:var(--hot)}
+
   .sec{padding-top:2.4rem}
   .sec-head{display:flex;align-items:baseline;gap:0.75rem;margin-bottom:1.1rem;flex-wrap:wrap}
   .sec-head h2{font-family:var(--display);font-weight:600;font-size:1.35rem;letter-spacing:-0.01em}
   .sec-head .count{font-family:var(--mono);font-size:12px;color:var(--phosphor)}
   .sec-intro{color:var(--muted);font-size:0.9rem;max-width:75ch;margin:-0.4rem 0 1.2rem}
+  .sec-tools{margin-left:auto;display:flex;gap:0.5rem;flex-wrap:wrap}
 
   .legend{display:flex;gap:1.1rem;flex-wrap:wrap;font-size:11px;font-family:var(--mono);color:var(--muted);margin-bottom:1.1rem}
   .legend span{display:flex;align-items:center;gap:6px}
@@ -57,16 +74,33 @@
   .dot.hot{background:var(--hot)} .dot.grow{background:var(--grow)} .dot.emerg{background:var(--emerg)}
   .dot.cat-green{background:#3FB950} .dot.cat-yellow{background:#E3B341} .dot.cat-blue{background:#4C8DFF}
 
+  /* busca em linguagem natural */
+  .ask{background:linear-gradient(180deg,#10141B,var(--panel));border:1px solid var(--line-2);border-radius:var(--radius);padding:1.1rem 1.2rem;margin-bottom:1.6rem}
+  .ask-row{display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center}
+  .ask-input{flex:1;min-width:240px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--text);font-family:var(--body);font-size:0.98rem;padding:0.75rem 0.9rem}
+  .ask-input::placeholder{color:var(--faint)}
+  .ask-input:focus{outline:2px solid var(--hot);outline-offset:1px}
+  .ask-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--faint);margin-bottom:0.6rem;display:flex;align-items:center;gap:7px}
+  .ask-eyebrow .spark{color:var(--phosphor)}
+  .ask-chips{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.7rem}
+  .ask-chip{font-family:var(--mono);font-size:10.5px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:3px 10px;cursor:pointer;transition:all .15s}
+  .ask-chip:hover{border-color:var(--line-2);color:var(--text)}
+  .ask-out{margin-top:1rem;border-top:1px solid var(--line);padding-top:0.9rem;display:none}
+  .ask-out.show{display:block}
+  .ask-ai{font-size:0.92rem;color:var(--text);line-height:1.6;white-space:pre-wrap}
+  .ask-ai-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--phosphor);margin-bottom:0.5rem}
+  .ask-hits{display:flex;flex-direction:column;gap:0.4rem;margin-top:0.8rem}
+  .ask-hit{display:flex;gap:0.7rem;align-items:baseline;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:0.55rem 0.75rem;text-decoration:none;transition:border-color .15s}
+  .ask-hit:hover{border-color:var(--line-2)}
+  .ask-hit .ah-when{font-family:var(--mono);font-size:10px;color:var(--phosphor);min-width:62px}
+  .ask-hit .ah-nm{font-weight:600;font-size:0.9rem}
+  .ask-hit .ah-meta{font-size:0.78rem;color:var(--muted)}
+  .ask-empty{font-family:var(--mono);font-size:11px;color:var(--faint)}
+
   .inds{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:0.7rem}
   .ind{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.8rem 0.9rem;cursor:pointer;transition:border-color .15s,transform .15s;font-family:var(--body);width:100%}
   .ind:hover{border-color:var(--line-2);transform:translateY(-2px)}
   .ind:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
-  .ind-top{display:flex;align-items:center;gap:7px;margin-bottom:0.5rem}
-  .ind-dot{width:8px;height:8px;border-radius:50%;flex:none}
-  .ind-dot.cat-green{background:#3FB950} .ind-dot.cat-yellow{background:#E3B341} .ind-dot.cat-blue{background:#4C8DFF}
-  .ind-name{font-family:var(--display);font-weight:600;font-size:0.92rem;line-height:1.15;color:var(--text)}
-  .ind-val{font-family:var(--display);font-weight:600;font-size:1.25rem;line-height:1;color:var(--text)}
-  .ind-lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.02em;color:var(--faint);margin-top:0.35rem;line-height:1.4}
 
   .esc{display:flex;flex-direction:column;gap:0.5rem}
   .esc-row{display:flex;align-items:center;gap:0.9rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.7rem 0.95rem;text-decoration:none;transition:border-color .15s,transform .15s;flex-wrap:wrap}
@@ -79,53 +113,33 @@
   .esc-bar{height:100%;border-radius:6px;width:0;transition:width .7s ease}
   .esc-val{font-family:var(--mono);font-size:12px;color:var(--text);min-width:104px;text-align:right}
   .esc-go{font-family:var(--mono);font-size:13px;color:var(--hot)}
-  .esc-axis{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:0.5rem}
 
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0.9rem}
-  .card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.05rem 1.1rem 1rem 1.35rem;overflow:hidden;transition:border-color .15s,transform .15s}
-  .card:hover{border-color:var(--line-2);transform:translateY(-2px)}
-  .card .stripe{position:absolute;left:0;top:0;bottom:0;width:4px}
-  .stripe.hot{background:var(--hot)} .stripe.grow{background:var(--grow)} .stripe.emerg{background:var(--emerg)}
-  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:0.6rem}
-  .card h3{font-family:var(--display);font-weight:600;font-size:1.05rem;letter-spacing:-0.01em;line-height:1.2}
-  .tag{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);white-space:nowrap;padding-top:3px}
-  .stat{font-family:var(--display);font-weight:600;font-size:1.9rem;line-height:1;margin-top:0.85rem}
-  .stat.hot{color:var(--hot)} .stat.grow{color:var(--grow)} .stat.emerg{color:var(--emerg)}
-  .stat-lbl{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:0.35rem;letter-spacing:0.02em}
-  .driver{font-size:0.86rem;color:var(--muted);margin-top:0.7rem}
-  .src{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:0.55rem}
-  .card-actions{margin-top:0.85rem;display:flex;gap:0.5rem;flex-wrap:wrap}
-  .btn{font-family:var(--mono);font-size:11px;letter-spacing:0.04em;text-transform:uppercase;background:transparent;border:1px solid var(--line-2);border-radius:6px;color:var(--text);padding:0.4rem 0.7rem;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
-  .btn:hover{background:var(--panel-3);border-color:var(--line)}
-  .btn.primary{border-color:var(--phosphor);color:var(--phosphor)}
-  .btn.primary:hover{background:rgba(229,37,42,0.12)}
-  .card-news{margin-top:0.85rem;border-top:1px solid var(--line);padding-top:0.7rem}
-  .cn-head{font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);margin-bottom:0.55rem;display:flex;align-items:center;gap:6px}
+  /* notícias por área (acordeão) */
+  .area-news{margin-top:0.5rem;background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .area-news[hidden]{display:none}
+  .cn-head{font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);padding:0.7rem 0.95rem 0.4rem;display:flex;align-items:center;gap:6px}
   .cn-live{width:6px;height:6px;border-radius:50%;background:var(--hot);animation:ping 2s infinite;flex:none}
-  .cn-item{display:block;text-decoration:none;margin-bottom:0.6rem}
-  .cn-item:last-child{margin-bottom:0}
-  .cn-title{font-size:0.82rem;color:var(--text);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .cn-item{display:block;text-decoration:none;padding:0.4rem 0.95rem 0.5rem;border-top:1px solid var(--line)}
+  .cn-title{font-size:0.86rem;color:var(--text);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .cn-item:hover .cn-title{color:var(--phosphor)}
   .cn-meta{font-family:var(--mono);font-size:9.5px;color:var(--faint);margin-top:2px}
-  .cn-empty{font-size:0.8rem;color:var(--faint);line-height:1.4}
+  .cn-empty{font-size:0.8rem;color:var(--faint);line-height:1.4;padding:0.4rem 0.95rem 0.8rem}
   .cn-empty a{color:var(--phosphor)}
 
-  /* fairs · faixas por continente + grade de cartões */
+  /* fairs */
   .fairs{display:flex;flex-direction:column;gap:1.4rem}
-  .fair-col{background:transparent;border:0;padding:0}
   .fair-col h3{font-family:var(--display);font-size:1.05rem;font-weight:600;margin-bottom:0.65rem;display:flex;align-items:center;gap:8px}
   .fair-col h3 .flag{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:2px 6px}
-  .fair-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:0.6rem}
+  .fair-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:0.6rem}
   .fair-legend{display:flex;gap:0.9rem;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:0.02em;color:var(--faint);margin:-0.6rem 0 1.1rem}
   .fair-legend span{display:flex;align-items:center;gap:5px}
   .fair-legend i{width:7px;height:7px;border-radius:50%;display:inline-block}
   .fair{display:flex;gap:0.7rem;padding:0.7rem 0.85rem;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);align-items:flex-start}
-  a.fair{text-decoration:none;color:inherit;cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
-  a.fair:hover{background:var(--panel-2);border-color:var(--line-2);transform:translateY(-2px)}
-  a.fair:hover .nm{color:var(--phosphor)}
-  a.fair:focus-visible{outline:2px solid var(--hot);outline-offset:-2px}
-  .fair .go{font-family:var(--mono);font-size:13px;color:var(--faint);align-self:center;margin-left:auto;padding-left:0.4rem;flex:none;transition:color .15s}
-  a.fair:hover .go{color:var(--phosphor)}
+  .fair .row1{display:flex;gap:0.7rem;align-items:flex-start;flex:1;min-width:0;text-decoration:none;color:inherit}
+  .fair{transition:background .15s,border-color .15s,transform .15s}
+  .fair:hover{background:var(--panel-2);border-color:var(--line-2);transform:translateY(-2px)}
+  .fair:hover .nm{color:var(--phosphor)}
+  .fair:focus-within{outline:2px solid var(--hot);outline-offset:-2px}
   .fair .fdot{width:8px;height:8px;border-radius:50%;flex:none;margin-top:6px}
   .fair .fdot.up{background:#3FB950}
   .fair .fdot.now{background:#4C8DFF}
@@ -137,15 +151,18 @@
   .fair .meta .area{color:var(--faint)}
   .pill{font-family:var(--mono);font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;padding:2px 7px;border-radius:999px;white-space:nowrap;margin-top:3px;display:inline-block}
   .pill.up{background:rgba(255,255,255,0.10);color:#d2d2d6}
-  .pill.now{background:rgba(229,37,42,0.20);color:#ff7a7d}
+  .pill.now{background:rgba(76,141,255,0.22);color:#9cc0ff}
   .pill.past{background:var(--panel-3);color:var(--faint)}
+  .fair .ics{font-family:var(--mono);font-size:15px;color:var(--faint);align-self:center;background:transparent;border:0;cursor:pointer;padding:0.2rem 0.3rem;border-radius:6px;transition:color .15s,background .15s;flex:none}
+  .fair .ics:hover{color:var(--phosphor);background:var(--panel-3)}
+  .fair .ics:focus-visible{outline:2px solid var(--hot);outline-offset:1px}
 
-  /* feed + auto-refresh (mesmo padrão do monitor de conflitos) */
+  /* feed status + auto-refresh (cotação) */
   .feed-status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted);margin-bottom:0.9rem}
-  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--hot);animation:ping 2s infinite}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:var(--up);animation:ping 2s infinite}
   .live-dot.err{background:var(--hot);animation:none}
   .live-dot.load{background:var(--muted);animation:ping 1s infinite}
-  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(229,37,42,0.5)}70%{box-shadow:0 0 0 7px rgba(229,37,42,0)}100%{box-shadow:0 0 0 0 rgba(229,37,42,0)}}
+  @keyframes ping{0%{box-shadow:0 0 0 0 rgba(63,185,80,0.5)}70%{box-shadow:0 0 0 7px rgba(63,185,80,0)}100%{box-shadow:0 0 0 0 rgba(63,185,80,0)}}
   .refresh-bar{display:flex;align-items:center;gap:0.7rem;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:0.7rem 0.95rem;margin-bottom:0.9rem}
   .rb-group{display:flex;align-items:center;gap:0.5rem}
   .rb-lbl{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--faint)}
@@ -154,7 +171,13 @@
   .rb-spacer{flex:1}
   #last-upd{font-family:var(--mono);font-size:11px;color:var(--muted)}
   .btn.sm{padding:0.35rem 0.6rem}.btn.paused{border-color:var(--muted);color:var(--muted)}
-  /* cotação em tempo real */
+
+  .btn{font-family:var(--mono);font-size:11px;letter-spacing:0.04em;text-transform:uppercase;background:transparent;border:1px solid var(--line-2);border-radius:6px;color:var(--text);padding:0.45rem 0.7rem;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+  .btn:hover{background:var(--panel-3);border-color:var(--line)}
+  .btn.primary{border-color:var(--phosphor);color:var(--phosphor)}
+  .btn.primary:hover{background:rgba(229,37,42,0.12)}
+
+  /* cotação */
   .fx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:0.9rem}
   .fx-card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem 1.2rem;transition:border-color .15s,transform .15s}
   .fx-card:hover{border-color:var(--line-2);transform:translateY(-2px)}
@@ -169,16 +192,25 @@
   .fx-sub{display:flex;gap:1.3rem;margin-top:0.6rem;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
   .fx-sub b{color:var(--text);font-weight:600}
   .fx-range{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:0.55rem}
+  .fx-skel{height:118px;background:linear-gradient(90deg,var(--panel) 25%,var(--panel-2) 37%,var(--panel) 63%);background-size:400% 100%;animation:sh 1.4s ease infinite;border-radius:var(--radius);border:1px solid var(--line)}
+  @keyframes sh{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+  /* conversor de moeda */
+  .conv{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem;margin-top:1rem}
+  .conv-head{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--faint);margin-bottom:0.7rem}
+  .conv-row{display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center}
+  .conv-amt{width:150px;background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:1rem;padding:0.6rem 0.7rem}
+  .conv-amt:focus{outline:2px solid var(--hot);outline-offset:1px}
+  .conv-sel{background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:13px;padding:0.62rem 0.5rem;cursor:pointer}
+  .conv-eq{font-family:var(--mono);color:var(--faint);font-size:1.1rem}
+  .conv-out{font-family:var(--display);font-weight:700;font-size:1.35rem;color:var(--up)}
+  .conv-note{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:0.6rem}
 
   footer{margin-top:3rem;border-top:1px solid var(--line);padding-top:1.6rem}
   footer h4{font-family:var(--display);font-size:0.95rem;margin-bottom:0.5rem}
   footer p{font-size:0.82rem;color:var(--muted);max-width:80ch;margin-bottom:0.7rem}
   footer .srcs{font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.9}
-  .disclaimer{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--hot);border-radius:0 var(--radius) var(--radius) 0;padding:0.9rem 1.1rem;margin-bottom:1.4rem}
-  .disclaimer strong{color:var(--hot);font-weight:600}
 
-  @media (max-width:680px){ .grid{grid-template-columns:1fr} .clock-box{text-align:left} }
-  @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto} }
   /* fornecedores */
   .sup-tool{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1.2rem}
   .sup-row{display:flex;gap:0.6rem;flex-wrap:wrap;align-items:center}
@@ -186,14 +218,7 @@
   .sup-input::placeholder{color:var(--faint)}
   .sup-input:focus{outline:2px solid var(--hot);outline-offset:1px}
   .sup-sel{background:var(--panel-2);border:1px solid var(--line-2);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:12px;padding:0.72rem 0.6rem;cursor:pointer}
-  .sup-btns{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.7rem}
-  .sup-chips{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.75rem}
-  .sup-chip{font-family:var(--mono);font-size:10.5px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:3px 9px;cursor:pointer;transition:all .15s}
-  .sup-chip:hover{border-color:var(--line-2);color:var(--text)}
   .sup-note{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:0.75rem;line-height:1.55}
-  .sup-sub{display:flex;align-items:baseline;gap:0.6rem;flex-wrap:wrap;margin:1.4rem 0 0.9rem}
-  .sup-sub h3{font-family:var(--display);font-size:1.05rem;font-weight:600}
-  .sup-sub span{font-family:var(--mono);font-size:11px;color:var(--phosphor)}
   .sup-list{display:flex;flex-direction:column;gap:1.1rem}
   .sup-cty h4{font-family:var(--display);font-size:0.98rem;font-weight:600;margin-bottom:0.55rem;display:flex;align-items:center;gap:8px}
   .sup-cty h4 .flag{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:2px 6px}
@@ -204,11 +229,7 @@
   .sup-card:hover .sup-nm{color:var(--phosphor)}
   .sup-tag{font-size:0.78rem;color:var(--muted);margin-top:3px;line-height:1.3}
   .sup-site{font-family:var(--mono);font-size:10.5px;color:var(--phosphor);margin-top:6px;word-break:break-all}
-  .sup-filters{margin-bottom:1rem}
-  .sup-cats{display:flex;gap:0.4rem;flex-wrap:wrap}
-  .sup-cat{font-family:var(--mono);font-size:10.5px;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer;transition:all .15s}
-  .sup-cat:hover{border-color:var(--line-2);color:var(--text)}
-  .sup-cat.active{background:rgba(229,37,42,0.14);border-color:var(--phosphor);color:var(--phosphor)}
+  .sup-filters{margin-bottom:1rem;align-items:center}
   .sup-badge{font-family:var(--mono);font-size:9px;letter-spacing:0.04em;text-transform:uppercase;color:var(--faint);border:1px solid var(--line-2);border-radius:4px;padding:1px 5px;margin-left:7px;white-space:nowrap}
   .sup-contact{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:5px}
   .sup-nmrow{display:flex;align-items:center;flex-wrap:wrap}
@@ -217,9 +238,13 @@
   .sup-form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0.6rem}
   .sup-form-grid .sup-input,.sup-form-grid .sup-sel{width:100%;min-width:0}
   .sup-form-btns{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem}
-  .sup-filters{align-items:center;margin-bottom:1rem}
   .sup-remove{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:7px;cursor:pointer;display:inline-block}
   .sup-remove:hover{color:var(--hot)}
+  .sup-origin{font-family:var(--mono);font-size:9px;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint);margin-top:6px}
+  .sup-origin.shared{color:var(--up)}
+
+  @media (max-width:680px){ .fair-list{grid-template-columns:1fr} .clock-box{text-align:left} .head-right{align-items:flex-start} }
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto} }
 </style>
 </head>
 <body>
@@ -227,75 +252,94 @@
 <header class="top">
   <div class="wrap top-row">
     <div>
-      <div class="eyebrow"> </div>
-      <h1>Observatório de Tecnologia Global</h1>
+      <div class="eyebrow" data-i18n="eyebrow"></div>
+      <h1 data-i18n="title">Observatório de Tecnologia Global</h1>
     </div>
-    <div class="clock-box">
-      <div class="lbl">Hora atual (local)</div>
-      <div id="clock">—</div>
-      <div class="rev"> </div>
+    <div class="head-right">
+      <div class="lang-switch" role="group" aria-label="Idioma">
+        <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-lang="es" aria-pressed="false">ES</button>
+      </div>
+      <div class="clock-box">
+        <div class="lbl" data-i18n="clockLabel">Hora atual (local)</div>
+        <div id="clock">—</div>
+      </div>
     </div>
   </div>
 </header>
 
-<section class="pulse">
-  <div class="cell"><div class="k">Automação com IA</div><div class="v teal">US$ 169 bi <small>2026</small></div><div class="note">Mercado global · Grand View</div></div>
-  <div class="cell"><div class="k">IA industrial</div><div class="v orange">US$ 13,7 bi <small>2026</small></div><div class="note">Crescendo ~51% ao ano · TBRC</div></div>
-  <div class="cell"><div class="k">Robôs em operação</div><div class="v">4,28 mi</div><div class="note">Estoque global instalado · IFR</div></div>
-  <div class="cell"><div class="k">Novas instalações na Ásia</div><div class="v">70%</div><div class="note">Da implantação mundial · IFR</div></div>
-</section>
+<section class="pulse" id="pulse"></section>
 
 <main class="wrap">
 
+  <!-- BUSCA EM LINGUAGEM NATURAL -->
+  <section class="sec" id="busca">
+    <div class="ask">
+      <div class="ask-eyebrow"><span class="spark">✦</span> <span data-i18n="askEyebrow">Pergunte ao observatório</span></div>
+      <div class="ask-row">
+        <input id="ask-input" class="ask-input" type="text" autocomplete="off" data-i18n-ph="askPlaceholder">
+        <button class="btn primary" type="button" id="ask-go" data-i18n="askGo">Perguntar</button>
+      </div>
+      <div class="ask-chips" id="ask-chips"></div>
+      <div class="ask-out" id="ask-out"></div>
+    </div>
+  </section>
+
   <section class="sec" id="feiras">
-    <div class="sec-head"><h2>Feiras de tecnologia</h2><span class="count" id="fair-count"></span></div>
-    <p class="sec-intro">Calendário de 2026. </p>
+    <div class="sec-head">
+      <h2 data-i18n="fairsTitle">Feiras de tecnologia</h2>
+      <span class="count" id="fair-count"></span>
+      <div class="sec-tools">
+        <button class="btn" type="button" id="fair-export-all" data-i18n="exportAll">Exportar agenda (.ics)</button>
+      </div>
+    </div>
+    <p class="sec-intro" data-i18n="fairsIntro">Calendário de 2026 por continente.</p>
     <div class="fair-legend">
-      <span><i style="background:#3FB950"></i>vão ocorrer</span>
-      <span><i style="background:#4C8DFF"></i>acontecendo agora</span>
-      <span><i style="background:#E5252A;opacity:.7"></i>encerradas</span>
+      <span><i style="background:#3FB950"></i><span data-i18n="legUp">vão ocorrer</span></span>
+      <span><i style="background:#4C8DFF"></i><span data-i18n="legNow">acontecendo agora</span></span>
+      <span><i style="background:#E5252A;opacity:.7"></i><span data-i18n="legPast">encerradas</span></span>
     </div>
     <div class="fairs" id="fairs"></div>
   </section>
 
   <section class="sec" id="areas">
-    <div class="sec-head"><h2>Áreas da tecnologia</h2><span class="count" id="area-count"></span></div>
+    <div class="sec-head"><h2 data-i18n="areasTitle">Áreas da tecnologia</h2><span class="count" id="area-count"></span></div>
+    <p class="sec-intro" data-i18n="areasIntro">Ritmo de crescimento por área. Clique para ver notícias recentes.</p>
     <div class="legend">
-      <span><span class="dot cat-green"></span>Alta tração</span>
-      <span><span class="dot cat-yellow"></span>Em expansão</span>
-      <span><span class="dot cat-blue"></span>Emergente</span>
+      <span><span class="dot cat-green"></span><span data-i18n="legHot">Alta tração</span></span>
+      <span><span class="dot cat-yellow"></span><span data-i18n="legGrow">Em expansão</span></span>
+      <span><span class="dot cat-blue"></span><span data-i18n="legEmerg">Emergente</span></span>
     </div>
-    
     <div class="esc" id="area-grid"></div>
-    <div class="esc-axis" id="area-axis"></div>
   </section>
 
-    <section class="sec" id="fornecedores">
-    <div class="sec-head"><h2>Fornecedores de tecnologia</h2></div>
+  <section class="sec" id="fornecedores">
+    <div class="sec-head"><h2 data-i18n="supTitle">Fornecedores de tecnologia</h2><span class="count" id="sup-origin-note"></span></div>
     <div class="sup-tool">
       <div class="sup-row">
-        <input id="sup-q" class="sup-input" type="text" placeholder="O que você procura? ex.: paletização autônoma" autocomplete="off">
-        <button class="btn" type="button" id="sup-web">Buscar na web</button>
-        <button class="btn primary" type="button" id="sup-cat">Catálogo interno</button>
+        <input id="sup-q" class="sup-input" type="text" autocomplete="off" data-i18n-ph="supPlaceholder">
+        <button class="btn" type="button" id="sup-web" data-i18n="supWeb">Buscar na web</button>
+        <button class="btn primary" type="button" id="sup-cat" data-i18n="supCatalog">Catálogo interno</button>
         <button class="btn sup-addbtn" type="button" id="sup-add" title="Incluir fornecedor" aria-label="Incluir fornecedor">+</button>
       </div>
     </div>
 
     <div class="sup-form" id="sup-form" hidden>
       <div class="sup-form-grid">
-        <input id="f-nm" class="sup-input" type="text" placeholder="Nome do fornecedor *" autocomplete="off">
-        <input id="f-pais" class="sup-input" type="text" placeholder="País *" autocomplete="off">
+        <input id="f-nm" class="sup-input" type="text" autocomplete="off" data-i18n-ph="fName">
+        <input id="f-pais" class="sup-input" type="text" autocomplete="off" data-i18n-ph="fCountry">
         <select id="f-cat" class="sup-sel" aria-label="Categoria"></select>
-        <input id="f-site" class="sup-input" type="text" placeholder="Site (https://...) *" autocomplete="off">
-        <input id="f-tag" class="sup-input" type="text" placeholder="Descrição curta" autocomplete="off">
-        <input id="f-contato" class="sup-input" type="text" placeholder="Contato (telefone/e-mail) — opcional" autocomplete="off">
+        <input id="f-site" class="sup-input" type="text" autocomplete="off" data-i18n-ph="fSite">
+        <input id="f-tag" class="sup-input" type="text" autocomplete="off" data-i18n-ph="fDesc">
+        <input id="f-contato" class="sup-input" type="text" autocomplete="off" data-i18n-ph="fContact">
       </div>
       <div class="sup-form-btns">
-        <button class="btn primary" type="button" id="f-save">Salvar</button>
-        <button class="btn" type="button" id="f-copy">Copiar código p/ fornecedores.js</button>
-        <button class="btn" type="button" id="f-cancel">Cancelar</button>
+        <button class="btn primary" type="button" id="f-save" data-i18n="fSave">Salvar</button>
+        <button class="btn" type="button" id="f-share" data-i18n="fShare">Publicar para todos</button>
+        <button class="btn" type="button" id="f-cancel" data-i18n="fCancel">Cancelar</button>
       </div>
-      <div class="sup-note" id="f-msg">Salvo só neste navegador. Para publicar para todos, cole o código gerado no arquivo fornecedores.js.</div>
+      <div class="sup-note" id="f-msg"></div>
     </div>
 
     <div class="sup-catalog" id="sup-catalog" hidden>
@@ -309,67 +353,83 @@
   </section>
 
   <section class="sec" id="cotacao">
-    <div class="sec-head"><h2>Cotação em tempo real</h2><span class="count" id="fx-count">USD · EUR · BRL</span></div>
-    <p class="sec-intro"> </p>
+    <div class="sec-head"><h2 data-i18n="fxTitle">Cotação em tempo real</h2><span class="count" id="fx-count">USD · EUR · CNY · BRL</span></div>
+    <div class="feed-status" id="fx-status"><span class="live-dot load"></span><span id="fx-status-txt"></span></div>
+    <div class="refresh-bar">
+      <div class="rb-group"><span class="rb-lbl" data-i18n="refreshEvery">Atualiza a cada</span>
+        <select class="rb-sel" id="fx-interval">
+          <option value="15">15s</option><option value="30" selected>30s</option><option value="60">60s</option><option value="120">2min</option>
+        </select>
+        <span id="countdown">30s</span>
+      </div>
+      <button class="btn sm" type="button" id="fx-pause" data-i18n="pause">Pausar</button>
+      <button class="btn sm" type="button" id="fx-now" data-i18n="refreshNow">Atualizar agora</button>
+      <span class="rb-spacer"></span>
+      <span id="last-upd"></span>
+    </div>
     <div class="fx-grid" id="fx-grid"></div>
+
+    <!-- conversor -->
+    <div class="conv">
+      <div class="conv-head" data-i18n="convHead">Conversor (usa a cotação ao vivo acima)</div>
+      <div class="conv-row">
+        <input id="conv-amt" class="conv-amt" type="number" inputmode="decimal" value="100" min="0" step="any">
+        <select id="conv-from" class="conv-sel"></select>
+        <span class="conv-eq">→</span>
+        <select id="conv-to" class="conv-sel"></select>
+        <span class="conv-eq">=</span>
+        <span class="conv-out" id="conv-out">—</span>
+      </div>
+      <div class="conv-note" id="conv-note"></div>
+    </div>
   </section>
 
   <footer>
-  
-    <h4>Fontes consultadas</h4>
+    <h4 data-i18n="sourcesTitle">Fontes consultadas</h4>
     <p class="srcs">
-      Mercados: Grand View Research · The Business Research Company (TBRC) · Global Market Insights · MarketsandMarkets · Federação Internacional de Robótica (IFR). Feiras: sites oficiais e organizadores (CES, GSMA/MWC, Hannover Messe, Mesago/SPS, COMPUTEX, IFA, GITEX, ABIMAQ/Informa Markets, South Summit Brazil, Web Summit Rio, Febraban Tech, Futurecom, Gramado Summit) e agregadores (Showmetech, ACATE, Startups.com.br, CIMM).
+      Mercados: Grand View Research · The Business Research Company (TBRC) · Global Market Insights · MarketsandMarkets · Federação Internacional de Robótica (IFR). Feiras: sites oficiais e organizadores (CES, GSMA/MWC, Hannover Messe, Mesago/SPS, COMPUTEX, IFA, GITEX, ABIMAQ/Informa Markets, South Summit Brazil, Web Summit Rio, Febraban Tech, Futurecom, Gramado Summit) e agregadores. Cotação: AwesomeAPI. Notícias: Google News.
     </p>
   </footer>
 
 </main>
 
+<!-- catálogo base de fornecedores (seu arquivo atual) — carregado antes do app -->
+<script src="fornecedores.js" onerror="void 0"></script>
 <script>
-/* ---------- relógio ---------- */
-function tick(){
-  const f=new Intl.DateTimeFormat('pt-BR',{weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  document.getElementById('clock').textContent=f.format(new Date());
-}
-tick();setInterval(tick,1000);
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+"use strict";
+/* ============================================================
+   OBSERVATÓRIO DE TECNOLOGIA GLOBAL
+   Região de DADOS + CONFIG (edite aqui para manter atualizado)
+   ============================================================ */
 
-/* ---------- áreas ---------- */
-const AREAS=[
-  {n:"Inteligência artificial",heat:"hot",stat:"US$ 169 bi",g:31,est:false,gq:"inteligência artificial",
-   q:'"inteligência artificial" OR "IA generativa"'},
-  {n:"Automação industrial",heat:"hot",stat:"US$ 13,7 bi",g:51,est:false,gq:"automação industrial",
-   q:'"automação industrial" OR "indústria 4.0"'},
-  {n:"Robótica & cobots",heat:"grow",stat:"4,28 mi robôs",g:7,est:false,gq:"robótica industrial",
-   q:'robótica OR cobots OR "robôs industriais"'},
-  {n:"Physical AI & humanoides",heat:"emerg",stat:"US$ 1,5 bi",g:47,est:false,gq:"robôs humanoides",
-   q:'"robôs humanoides" OR humanoide OR "robô humanoide"'},
-  {n:"Semicondutores & chips de IA",heat:"hot",stat:"Gargalo nº 1",g:30,est:true,gq:"semicondutores chips IA",
-   q:'semicondutores OR chips OR Nvidia'},
-  {n:"Nuvem & data centers",heat:"hot",stat:"Boom de capex",g:22,est:true,gq:"data center nuvem",
-   q:'"data center" OR "data centers" OR "computação em nuvem"'},
-  {n:"Cibersegurança",heat:"grow",stat:"US$ 6,3 bi",g:25,est:true,gq:"cibersegurança",
-   q:'cibersegurança OR "ataque hacker" OR ransomware'},
+/* Endereço do backend opcional (server.js). Vazio = mesma origem.
+   Se o backend não existir, a página degrada com elegância:
+   notícias e IA caem para o modo local, fornecedores ficam locais. */
+const API_BASE = "";
+
+/* Carimbo global de verificação dos números de mercado */
+const DADOS_VERIFICADOS_EM = "2026-06"; // AAAA-MM
+
+/* PULSO — indicadores macro (cada um com sua data de verificação) */
+const PULSE = [
+  {key:"autoIA", cls:"teal",   val:"US$ 169 bi", yr:"2026", src:"Grand View",        ver:"2026-06"},
+  {key:"iaInd",  cls:"orange", val:"US$ 13,7 bi",yr:"2026", src:"TBRC · ~51%/ano",   ver:"2026-06"},
+  {key:"robos",  cls:"",       val:"4,28 mi",    yr:"",     src:"IFR · estoque global", ver:"2026-06"},
+  {key:"asia",   cls:"",       val:"70%",        yr:"",     src:"IFR · da implantação", ver:"2026-06"}
 ];
-const CAT={hot:"cat-green",grow:"cat-yellow",emerg:"cat-blue"};
-const CATCOLOR={hot:"#3FB950",grow:"#E3B341",emerg:"#4C8DFF"};
-const ag=document.getElementById('area-grid');
-const ranked=[...AREAS].sort((a,b)=>b.g-a.g);
-const maxG=Math.max(...ranked.map(a=>a.g));
-ranked.forEach(a=>{
-  const gn=(a.est?'~':'')+a.g+'%/ano'+(a.est?' (est.)':'');
-  const url='https://news.google.com/search?q='+encodeURIComponent(a.gq)+'&hl=pt-BR&gl=BR&ceid=BR:pt-419';
-  const el=document.createElement('a');el.className='esc-row';el.href=url;el.target='_blank';el.rel='noopener';
-  el.title='Abrir notícias de '+a.n+' no Google News (Brasil)';
-  el.innerHTML='<div class="esc-head"><span class="dot '+CAT[a.heat]+'"></span><span class="esc-name">'+esc(a.n)+'</span><span class="esc-stat">'+esc(a.stat)+'</span></div>'+
-    '<div class="esc-bar-wrap"><div class="esc-bar" data-w="'+Math.round(a.g/maxG*100)+'" style="background:'+CATCOLOR[a.heat]+'"></div></div>'+
-    '<span class="esc-val">'+esc(gn)+'</span><span class="esc-go">↗</span>';
-  ag.appendChild(el);
-});
-requestAnimationFrame(()=>ag.querySelectorAll('.esc-bar').forEach(b=>{b.style.width=b.dataset.w+'%';}));
-document.getElementById('area-count').textContent='7 áreas · ritmo de crescimento';
 
+/* ÁREAS — nome trilíngue, indicador, crescimento %/ano e consulta de notícias */
+const AREAS=[
+  {id:"ia",   nm:{pt:"Inteligência artificial",en:"Artificial intelligence",es:"Inteligencia artificial"}, heat:"hot",  stat:"US$ 169 bi", g:31, est:false, gq:"inteligência artificial"},
+  {id:"auto", nm:{pt:"Automação industrial",en:"Industrial automation",es:"Automatización industrial"},     heat:"hot",  stat:"US$ 13,7 bi",g:51, est:false, gq:"automação industrial indústria 4.0"},
+  {id:"rob",  nm:{pt:"Robótica & cobots",en:"Robotics & cobots",es:"Robótica y cobots"},                    heat:"grow", stat:"4,28 mi",    g:7,  est:false, gq:"robótica industrial cobots"},
+  {id:"phys", nm:{pt:"Physical AI & humanoides",en:"Physical AI & humanoids",es:"IA física y humanoides"},   heat:"emerg",stat:"US$ 1,5 bi", g:47, est:false, gq:"robôs humanoides"},
+  {id:"chip", nm:{pt:"Semicondutores & chips de IA",en:"Semiconductors & AI chips",es:"Semiconductores y chips de IA"}, heat:"hot", stat:"Gargalo nº 1", g:30, est:true, gq:"semicondutores chips IA Nvidia"},
+  {id:"cloud",nm:{pt:"Nuvem & data centers",en:"Cloud & data centers",es:"Nube y centros de datos"},        heat:"hot",  stat:"Boom de capex", g:22, est:true, gq:"data center computação em nuvem"},
+  {id:"cyber",nm:{pt:"Cibersegurança",en:"Cybersecurity",es:"Ciberseguridad"},                              heat:"grow", stat:"US$ 6,3 bi", g:25, est:true, gq:"cibersegurança ransomware ataque"}
+];
 
-/* ---------- feiras ---------- */
+/* FEIRAS — proper nouns preservados; datas ISO movem o status automaticamente */
 const FAIRS_WORLD=[
   {nm:"CES",disp:"6–9 jan",s:"2026-01-06",e:"2026-01-09",loc:"Las Vegas, EUA",area:"Eletrônicos de consumo & IA",url:"https://www.ces.tech"},
   {nm:"MWC Barcelona",disp:"2–5 mar",s:"2026-03-02",e:"2026-03-05",loc:"Barcelona, Espanha",area:"Móvel, 5G/6G, IA",url:"https://www.mwcbarcelona.com"},
@@ -383,7 +443,7 @@ const FAIRS_WORLD=[
   {nm:"Canton Fair (2ª fase)",disp:"a partir de 15 out",s:"2026-10-15",e:"2026-10-19",loc:"Guangzhou, China",area:"Multissetorial & eletrônica",url:"https://www.cantonfair.org.cn/en-US"},
   {nm:"SPS – Smart Production Solutions",disp:"24–26 nov",s:"2026-11-24",e:"2026-11-26",loc:"Nuremberg, Alemanha",area:"Automação inteligente",url:"https://sps.mesago.com/nuernberg/en.html"},
   {nm:"Slush",disp:"fim de nov",s:"2026-11-30",e:"2026-12-01",loc:"Helsinque, Finlândia",area:"Startups & deep tech",url:"https://slush.org"},
-  {nm:"GITEX Global",disp:"7–11 dez",s:"2026-12-07",e:"2026-12-11",loc:"Dubai, EAU",area:"IA, cibersegurança, startups",url:"https://www.gitex.com"},
+  {nm:"GITEX Global",disp:"7–11 dez",s:"2026-12-07",e:"2026-12-11",loc:"Dubai, EAU",area:"IA, cibersegurança, startups",url:"https://www.gitex.com"}
 ];
 const FAIRS_BR=[
   {nm:"South Summit Brazil",disp:"25–27 mar",s:"2026-03-25",e:"2026-03-27",loc:"Porto Alegre, RS",area:"Startups & venture capital",url:"https://www.southsummit.io/brazil"},
@@ -397,234 +457,703 @@ const FAIRS_BR=[
   {nm:"Febraban Tech",disp:"24–26 ago",s:"2026-08-24",e:"2026-08-26",loc:"São Paulo, SP",area:"Tecnologia financeira",url:"https://febrabantech.febraban.org.br"},
   {nm:"Futurecom",disp:"6–8 out",s:"2026-10-06",e:"2026-10-08",loc:"São Paulo, SP",area:"Conectividade, IA, infra digital",url:"https://www.futurecom.com.br"},
   {nm:"Big Data & AI Brazil Experience",disp:"22 nov",s:"2026-11-22",e:"2026-11-22",loc:"São Paulo, SP",area:"Big data & IA"},
-  {nm:"EXPOMAFE",disp:"4–8 mai 2027",s:"2027-05-04",e:"2027-05-08",loc:"São Paulo, SP",area:"Máquinas-ferramenta & automação",url:"https://www.expomafe.com.br"},
+  {nm:"EXPOMAFE",disp:"4–8 mai 2027",s:"2027-05-04",e:"2027-05-08",loc:"São Paulo, SP",area:"Máquinas-ferramenta & automação",url:"https://www.expomafe.com.br"}
 ];
+const ALL_FAIRS=[...FAIRS_WORLD,...FAIRS_BR];
 
+/* COTAÇÃO — pares (CNY incluído: China é central para tech) */
+const FX_PAIRS=[
+  {key:"USDBRL",api:"USD-BRL",label:{pt:"Dólar americano",en:"US dollar",es:"Dólar estadounidense"},sub:"USD / BRL",symbol:"R$",code:"USD"},
+  {key:"EURBRL",api:"EUR-BRL",label:{pt:"Euro",en:"Euro",es:"Euro"},sub:"EUR / BRL",symbol:"R$",code:"EUR"},
+  {key:"CNYBRL",api:"CNY-BRL",label:{pt:"Yuan chinês",en:"Chinese yuan",es:"Yuan chino"},sub:"CNY / BRL",symbol:"R$",code:"CNY"},
+  {key:"EURUSD",api:"EUR-USD",label:{pt:"Euro em dólar",en:"Euro in dollars",es:"Euro en dólares"},sub:"EUR / USD",symbol:"US$",code:null}
+];
+const FX_API="https://economia.awesomeapi.com.br/json/last/"+FX_PAIRS.map(p=>p.api).join(",");
+
+/* ============================================================
+   i18n — textos da interface
+   ============================================================ */
+const I18N={
+  pt:{
+    locale:"pt-BR",
+    eyebrow:"", title:"Observatório de Tecnologia Global", clockLabel:"Hora atual (local)",
+    p_autoIA:"Automação com IA", p_iaInd:"IA industrial", p_robos:"Robôs em operação", p_asia:"Novas instalações na Ásia",
+    verified:"verificado em",
+    askEyebrow:"Pergunte ao observatório", askPlaceholder:"ex.: feiras de automação na Europa no 2º semestre",
+    askGo:"Perguntar", askThinking:"Consultando…", askLocalTag:"Resposta local", askAiTag:"Resumo por IA",
+    askNoHits:"Nada encontrado para esses termos. Tente outra área, continente ou mês.",
+    askChips:["feiras de IA no Brasil","automação na Europa","o que acontece agora","área que mais cresce"],
+    fairsTitle:"Feiras de tecnologia", fairsIntro:"Calendário de 2026 por continente. Toque no ícone de agenda para exportar (.ics).",
+    exportAll:"Exportar agenda (.ics)", legUp:"vão ocorrer", legNow:"acontecendo agora", legPast:"encerradas",
+    fairCount:(n,c)=>n+" eventos · "+c+" continentes", evt1:"evento", evtN:"eventos",
+    stUp:d=>d===0?"começa hoje":("em "+d+(d===1?" dia":" dias")), stNow:"acontecendo agora", stPast:"edição encerrada",
+    addCal:"Adicionar à agenda",
+    areasTitle:"Áreas da tecnologia", areasIntro:"Ritmo de crescimento por área. Clique para abrir notícias recentes.",
+    areaCount:"7 áreas · ritmo de crescimento", perYr:"/ano", est:" (est.)",
+    legHot:"Alta tração", legGrow:"Em expansão", legEmerg:"Emergente", newsHead:"Notícias recentes", newsMore:"ver mais no Google News",
+    newsLoading:"Carregando notícias…", newsNone:"Sem manchetes agora.",
+    supTitle:"Fornecedores de tecnologia", supPlaceholder:"O que você procura? ex.: paletização autônoma",
+    supWeb:"Buscar na web", supCatalog:"Catálogo interno", supCount:n=>n+(n===1?" fornecedor":" fornecedores"),
+    supNoneFilter:"Nenhum fornecedor com esses filtros.", allCats:"Todas as categorias", allCountries:"Todos os países",
+    fName:"Nome do fornecedor *", fCountry:"País *", fCat:"Categoria…", fSite:"Site (https://...) *", fDesc:"Descrição curta", fContact:"Contato (telefone/e-mail) — opcional",
+    fSave:"Salvar neste navegador", fShare:"Publicar para todos", fCancel:"Cancelar",
+    fNeed:"Preencha ao menos Nome e Site.", fSavedLocal:"Salvo neste navegador.", fShared:"Publicado para todos os usuários!",
+    fShareOffline:"Backend indisponível — salvo só neste navegador. Conecte o server.js para publicar.", remove:"✕ remover",
+    originLocal:"só neste navegador", originShared:"compartilhado",
+    fxTitle:"Cotação em tempo real", refreshEvery:"Atualiza a cada", pause:"Pausar", resume:"Retomar", refreshNow:"Atualizar agora",
+    lastUpd:"Atualizado", fxLoading:"Buscando cotação…", fxOk:"Ao vivo", fxErr:"Falha ao atualizar — tentando de novo", buy:"Compra", sell:"Venda", dayRange:"Mín/Máx do dia",
+    convHead:"Conversor (usa a cotação ao vivo acima)", convNote:"Taxas de referência (compra). Não considera spread bancário.", convWait:"aguardando cotação…",
+    sourcesTitle:"Fontes consultadas"
+  },
+  en:{
+    locale:"en-US",
+    eyebrow:"", title:"Global Technology Observatory", clockLabel:"Current time (local)",
+    p_autoIA:"AI automation", p_iaInd:"Industrial AI", p_robos:"Robots in operation", p_asia:"New installs in Asia",
+    verified:"verified",
+    askEyebrow:"Ask the observatory", askPlaceholder:"e.g. automation fairs in Europe in H2",
+    askGo:"Ask", askThinking:"Looking…", askLocalTag:"Local answer", askAiTag:"AI summary",
+    askNoHits:"Nothing matched those terms. Try another area, continent or month.",
+    askChips:["AI fairs in Brazil","automation in Europe","what's happening now","fastest-growing area"],
+    fairsTitle:"Tech fairs", fairsIntro:"2026 calendar by continent. Tap the calendar icon to export (.ics).",
+    exportAll:"Export calendar (.ics)", legUp:"upcoming", legNow:"happening now", legPast:"finished",
+    fairCount:(n,c)=>n+" events · "+c+" continents", evt1:"event", evtN:"events",
+    stUp:d=>d===0?"starts today":("in "+d+(d===1?" day":" days")), stNow:"happening now", stPast:"edition finished",
+    addCal:"Add to calendar",
+    areasTitle:"Technology areas", areasIntro:"Growth pace by area. Click to open recent news.",
+    areaCount:"7 areas · growth pace", perYr:"/yr", est:" (est.)",
+    legHot:"High traction", legGrow:"Expanding", legEmerg:"Emerging", newsHead:"Recent news", newsMore:"more on Google News",
+    newsLoading:"Loading news…", newsNone:"No headlines right now.",
+    supTitle:"Technology suppliers", supPlaceholder:"What are you looking for? e.g. autonomous palletizing",
+    supWeb:"Search the web", supCatalog:"Internal catalog", supCount:n=>n+(n===1?" supplier":" suppliers"),
+    supNoneFilter:"No suppliers match these filters.", allCats:"All categories", allCountries:"All countries",
+    fName:"Supplier name *", fCountry:"Country *", fCat:"Category…", fSite:"Website (https://...) *", fDesc:"Short description", fContact:"Contact (phone/email) — optional",
+    fSave:"Save in this browser", fShare:"Publish for everyone", fCancel:"Cancel",
+    fNeed:"Fill in at least Name and Website.", fSavedLocal:"Saved in this browser.", fShared:"Published for all users!",
+    fShareOffline:"Backend unavailable — saved locally only. Connect server.js to publish.", remove:"✕ remove",
+    originLocal:"this browser only", originShared:"shared",
+    fxTitle:"Live exchange rates", refreshEvery:"Refresh every", pause:"Pause", resume:"Resume", refreshNow:"Refresh now",
+    lastUpd:"Updated", fxLoading:"Fetching rates…", fxOk:"Live", fxErr:"Update failed — retrying", buy:"Bid", sell:"Ask", dayRange:"Day low/high",
+    convHead:"Converter (uses the live rates above)", convNote:"Reference rates (bid). Bank spread not included.", convWait:"waiting for rates…",
+    sourcesTitle:"Sources"
+  },
+  es:{
+    locale:"es-ES",
+    eyebrow:"", title:"Observatorio de Tecnología Global", clockLabel:"Hora actual (local)",
+    p_autoIA:"Automatización con IA", p_iaInd:"IA industrial", p_robos:"Robots en operación", p_asia:"Nuevas instalaciones en Asia",
+    verified:"verificado el",
+    askEyebrow:"Pregunta al observatorio", askPlaceholder:"ej.: ferias de automatización en Europa en el 2º semestre",
+    askGo:"Preguntar", askThinking:"Consultando…", askLocalTag:"Respuesta local", askAiTag:"Resumen por IA",
+    askNoHits:"Nada coincide con esos términos. Prueba otra área, continente o mes.",
+    askChips:["ferias de IA en Brasil","automatización en Europa","qué pasa ahora","área que más crece"],
+    fairsTitle:"Ferias de tecnología", fairsIntro:"Calendario 2026 por continente. Toca el icono de agenda para exportar (.ics).",
+    exportAll:"Exportar agenda (.ics)", legUp:"próximas", legNow:"en curso", legPast:"finalizadas",
+    fairCount:(n,c)=>n+" eventos · "+c+" continentes", evt1:"evento", evtN:"eventos",
+    stUp:d=>d===0?"empieza hoy":("en "+d+(d===1?" día":" días")), stNow:"en curso", stPast:"edición finalizada",
+    addCal:"Añadir a la agenda",
+    areasTitle:"Áreas de tecnología", areasIntro:"Ritmo de crecimiento por área. Haz clic para abrir noticias recientes.",
+    areaCount:"7 áreas · ritmo de crecimiento", perYr:"/año", est:" (est.)",
+    legHot:"Alta tracción", legGrow:"En expansión", legEmerg:"Emergente", newsHead:"Noticias recientes", newsMore:"más en Google News",
+    newsLoading:"Cargando noticias…", newsNone:"Sin titulares por ahora.",
+    supTitle:"Proveedores de tecnología", supPlaceholder:"¿Qué buscas? ej.: paletizado autónomo",
+    supWeb:"Buscar en la web", supCatalog:"Catálogo interno", supCount:n=>n+(n===1?" proveedor":" proveedores"),
+    supNoneFilter:"Ningún proveedor con esos filtros.", allCats:"Todas las categorías", allCountries:"Todos los países",
+    fName:"Nombre del proveedor *", fCountry:"País *", fCat:"Categoría…", fSite:"Sitio (https://...) *", fDesc:"Descripción corta", fContact:"Contacto (teléfono/correo) — opcional",
+    fSave:"Guardar en este navegador", fShare:"Publicar para todos", fCancel:"Cancelar",
+    fNeed:"Completa al menos Nombre y Sitio.", fSavedLocal:"Guardado en este navegador.", fShared:"¡Publicado para todos!",
+    fShareOffline:"Backend no disponible — guardado solo aquí. Conecta server.js para publicar.", remove:"✕ quitar",
+    originLocal:"solo este navegador", originShared:"compartido",
+    fxTitle:"Cotización en tiempo real", refreshEvery:"Actualiza cada", pause:"Pausar", resume:"Reanudar", refreshNow:"Actualizar ahora",
+    lastUpd:"Actualizado", fxLoading:"Buscando cotización…", fxOk:"En vivo", fxErr:"Error al actualizar — reintentando", buy:"Compra", sell:"Venta", dayRange:"Mín/Máx del día",
+    convHead:"Conversor (usa la cotización en vivo de arriba)", convNote:"Tasas de referencia (compra). No incluye spread bancario.", convWait:"esperando cotización…",
+    sourcesTitle:"Fuentes consultadas"
+  }
+};
+
+/* ============================================================
+   Estado + utilidades
+   ============================================================ */
+let LANG = (function(){ try{return localStorage.getItem("otg_lang")||"";}catch(e){return "";} })();
+if(!I18N[LANG]){ const nav=(navigator.language||"pt").slice(0,2); LANG = I18N[nav]?nav:"pt"; }
+function t(){ return I18N[LANG]; }
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function noAccent(s){return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();}
+function fmtVerified(ym){ // "2026-06" -> localizado "jun/2026"
+  const [y,m]=ym.split("-").map(Number);
+  const d=new Date(y,(m||1)-1,1);
+  return new Intl.DateTimeFormat(t().locale,{month:"short",year:"numeric"}).format(d);
+}
+
+/* ---------- relógio ---------- */
+function tick(){
+  const f=new Intl.DateTimeFormat(t().locale,{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  document.getElementById("clock").textContent=f.format(new Date());
+}
+tick();setInterval(tick,1000);
+
+/* ============================================================
+   PULSO
+   ============================================================ */
+function renderPulse(){
+  const el=document.getElementById("pulse");
+  el.innerHTML="";
+  PULSE.forEach(p=>{
+    const cell=document.createElement("div");cell.className="cell";
+    cell.innerHTML=
+      '<div class="k">'+esc(t()["p_"+p.key])+'</div>'+
+      '<div class="v '+p.cls+'">'+esc(p.val)+(p.yr?' <small>'+esc(p.yr)+'</small>':'')+'</div>'+
+      '<div class="note">'+esc(p.src)+'</div>'+
+      '<div class="ver">'+esc(t().verified)+' '+esc(fmtVerified(p.ver))+'</div>';
+    el.appendChild(cell);
+  });
+}
+
+/* ============================================================
+   ÁREAS + notícias por área
+   ============================================================ */
+const CAT={hot:"cat-green",grow:"cat-yellow",emerg:"cat-blue"};
+const CATCOLOR={hot:"#3FB950",grow:"#E3B341",emerg:"#4C8DFF"};
+function newsUrl(gq){return "https://news.google.com/search?q="+encodeURIComponent(gq)+"&hl="+t().locale+"&gl=BR&ceid=BR:"+LANG;}
+
+function renderAreas(){
+  const ag=document.getElementById("area-grid");
+  ag.innerHTML="";
+  const ranked=[...AREAS].sort((a,b)=>b.g-a.g);
+  const maxG=Math.max(...ranked.map(a=>a.g));
+  ranked.forEach(a=>{
+    const gn=(a.est?"~":"")+a.g+"%"+t().perYr+(a.est?t().est:"");
+    const wrap=document.createElement("div");
+    const row=document.createElement("button");
+    row.type="button";row.className="esc-row";
+    row.setAttribute("aria-expanded","false");
+    row.innerHTML='<div class="esc-head"><span class="dot '+CAT[a.heat]+'"></span><span class="esc-name">'+esc(a.nm[LANG])+'</span><span class="esc-stat">'+esc(a.stat)+'</span></div>'+
+      '<div class="esc-bar-wrap"><div class="esc-bar" data-w="'+Math.round(a.g/maxG*100)+'" style="background:'+CATCOLOR[a.heat]+'"></div></div>'+
+      '<span class="esc-val">'+esc(gn)+'</span><span class="esc-go">↗</span>';
+    const news=document.createElement("div");news.className="area-news";news.hidden=true;
+    row.addEventListener("click",()=>{
+      const open=!news.hidden;
+      if(open){news.hidden=true;row.setAttribute("aria-expanded","false");return;}
+      news.hidden=false;row.setAttribute("aria-expanded","true");
+      loadAreaNews(a,news);
+    });
+    wrap.appendChild(row);wrap.appendChild(news);ag.appendChild(wrap);
+  });
+  requestAnimationFrame(()=>ag.querySelectorAll(".esc-bar").forEach(b=>{b.style.width=b.dataset.w+"%";}));
+  document.getElementById("area-count").textContent=t().areaCount;
+}
+
+const _newsCache={};
+async function loadAreaNews(a,box){
+  if(box.dataset.loaded==="1") return;
+  box.innerHTML='<div class="cn-head"><span class="cn-live"></span>'+esc(t().newsHead)+'</div><div class="cn-empty">'+esc(t().newsLoading)+'</div>';
+  let items=_newsCache[a.id];
+  if(!items){
+    try{
+      const r=await fetch(API_BASE+"/api/news?area="+encodeURIComponent(a.gq)+"&lang="+LANG,{cache:"no-store"});
+      if(!r.ok) throw 0;
+      const data=await r.json();
+      items=(data.items||[]).slice(0,5);
+      _newsCache[a.id]=items;
+    }catch(e){ items=null; }
+  }
+  let html='<div class="cn-head"><span class="cn-live"></span>'+esc(t().newsHead)+'</div>';
+  if(items && items.length){
+    items.forEach(it=>{
+      html+='<a class="cn-item" href="'+esc(it.link)+'" target="_blank" rel="noopener">'+
+            '<div class="cn-title">'+esc(it.title)+'</div>'+
+            '<div class="cn-meta">'+esc(it.source||"")+(it.pubDate?' · '+esc(it.pubDate):"")+'</div></a>';
+    });
+  }else{
+    html+='<div class="cn-empty">'+esc(t().newsNone)+' <a href="'+esc(newsUrl(a.gq))+'" target="_blank" rel="noopener">'+esc(t().newsMore)+' ↗</a></div>';
+  }
+  box.innerHTML=html;
+  box.dataset.loaded="1";
+}
+
+/* ============================================================
+   FEIRAS + exportação .ics
+   ============================================================ */
 function fairStatus(s,e){
   const now=new Date();now.setHours(0,0,0,0);
-  const start=new Date(s+'T00:00:00'),end=new Date((e||s)+'T23:59:59');
-  if(now>end)return{k:'past',t:'edição encerrada'};
-  if(now>=start&&now<=end)return{k:'now',t:'acontecendo agora'};
+  const start=new Date(s+"T00:00:00"),end=new Date((e||s)+"T23:59:59");
+  if(now>end)return{k:"past"};
+  if(now>=start&&now<=end)return{k:"now"};
   const days=Math.ceil((start-now)/86400000);
-  return{k:'up',t:days===0?'começa hoje':('em '+days+(days===1?' dia':' dias'))};
+  return{k:"up",days:days};
 }
-function yr(s){return s.slice(0,4)!=='2026'?(' '+s.slice(0,4)):'';}
-function fairUrl(f){
-  return f.url || ('https://www.google.com/search?q='+encodeURIComponent(f.nm+' '+f.loc));
+function statusText(st){
+  if(st.k==="past")return t().stPast;
+  if(st.k==="now")return t().stNow;
+  return t().stUp(st.days);
 }
-function renderFairs(list,el){
-  const enriched=list.map(f=>({...f,st:fairStatus(f.s,f.e)}));
-  enriched.sort((a,b)=>{
-    const au=a.st.k!=='past',bu=b.st.k!=='past';
-    if(au!==bu)return au?-1:1;
-    return au?(a.s<b.s?-1:1):(a.s>b.s?-1:1);
-  });
-  el.innerHTML='';
-  enriched.forEach(f=>{
-    const row=document.createElement('a');row.className='fair';
-    row.href=fairUrl(f);row.target='_blank';row.rel='noopener';
-    row.title='Abrir site de '+f.nm;
-    const dispYr=(f.disp.match(/20\d\d/))?'':yr(f.s);
-    row.innerHTML=
-      '<span class="fdot '+f.st.k+'" aria-hidden="true"></span>'+
-      '<div class="when">'+esc(f.disp)+esc(dispYr)+'</div>'+
-      '<div class="body"><div class="nm">'+esc(f.nm)+'</div>'+
-        '<div class="meta">'+esc(f.loc)+' · <span class="area">'+esc(f.area)+'</span></div>'+
-        '<span class="pill '+f.st.k+'">'+esc(f.st.t)+'</span></div>'+
-      '<div class="go">↗</div>';
-    el.appendChild(row);
-  });
-}
+function yr(s){return s.slice(0,4)!=="2026"?(" "+s.slice(0,4)):"";}
+function fairUrl(f){return f.url || ("https://www.google.com/search?q="+encodeURIComponent(f.nm+" "+f.loc));}
 function continentOf(f){
-  if(f.cont)return f.cont;
-  const c=f.loc.split(',').pop().trim();
-  const EU=['Espanha','Alemanha','Finlândia','França','Reino Unido','Itália','Holanda','Países Baixos','Suíça','Portugal'];
-  const AS=['China','Taiwan','EAU','Japão','Coreia do Sul','Índia','Singapura','Hong Kong'];
-  const NA=['EUA','Canadá','México'];
-  if(EU.includes(c))return'Europa';
-  if(AS.includes(c))return'Ásia';
-  if(NA.includes(c))return'América do Norte';
-  return'América do Sul';
+  const c=f.loc.split(",").pop().trim();
+  const EU=["Espanha","Alemanha","Finlândia","França","Reino Unido","Itália","Holanda","Países Baixos","Suíça","Portugal"];
+  const AS=["China","Taiwan","EAU","Japão","Coreia do Sul","Índia","Singapura","Hong Kong"];
+  const NA=["EUA","Canadá","México"];
+  if(EU.includes(c))return"Europa";
+  if(AS.includes(c))return"Ásia";
+  if(NA.includes(c))return"América do Norte";
+  return"América do Sul";
 }
-const ALL_FAIRS=[...FAIRS_WORLD,...FAIRS_BR];
-const CONT_ORDER=['América do Sul','América do Norte','Europa','Ásia'];
-const fairsEl=document.getElementById('fairs');
-fairsEl.innerHTML='';
-let contCount=0;
-CONT_ORDER.forEach(cont=>{
-  const items=ALL_FAIRS.filter(f=>continentOf(f)===cont);
-  if(!items.length)return;
-  contCount++;
-  const col=document.createElement('div');col.className='fair-col';
-  const head=document.createElement('h3');
-  head.innerHTML=esc(cont)+' <span class="flag">'+items.length+(items.length===1?' evento':' eventos')+'</span>';
-  col.appendChild(head);
-  const body=document.createElement('div');body.className='fair-list';
-  col.appendChild(body);
-  renderFairs(items,body);
-  fairsEl.appendChild(col);
+const CONT_NAMES={
+  "América do Sul":{pt:"América do Sul",en:"South America",es:"América del Sur"},
+  "América do Norte":{pt:"América do Norte",en:"North America",es:"América del Norte"},
+  "Europa":{pt:"Europa",en:"Europe",es:"Europa"},
+  "Ásia":{pt:"Ásia",en:"Asia",es:"Asia"}
+};
+const CONT_ORDER=["América do Sul","América do Norte","Europa","Ásia"];
+
+/* gera conteúdo .ics para uma ou mais feiras */
+function icsDate(s){return s.replace(/-/g,"");}
+function icsDateEnd(e){ // DTEND é exclusivo: dia seguinte ao fim
+  const d=new Date(e+"T00:00:00");d.setDate(d.getDate()+1);
+  return d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");
+}
+function icsEscape(s){return String(s).replace(/[\\;,]/g,m=>"\\"+m).replace(/\n/g,"\\n");}
+function buildIcs(fairs){
+  const now=new Date().toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
+  let out="BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Observatorio Tech Global//PT-BR//\r\nCALSCALE:GREGORIAN\r\n";
+  fairs.forEach((f,i)=>{
+    out+="BEGIN:VEVENT\r\n";
+    out+="UID:otg-"+icsDate(f.s)+"-"+i+"@observatorio.tech\r\n";
+    out+="DTSTAMP:"+now+"\r\n";
+    out+="DTSTART;VALUE=DATE:"+icsDate(f.s)+"\r\n";
+    out+="DTEND;VALUE=DATE:"+icsDateEnd(f.e||f.s)+"\r\n";
+    out+="SUMMARY:"+icsEscape(f.nm)+"\r\n";
+    out+="LOCATION:"+icsEscape(f.loc)+"\r\n";
+    out+="DESCRIPTION:"+icsEscape(f.area+(f.url?(" — "+f.url):""))+"\r\n";
+    if(f.url) out+="URL:"+icsEscape(f.url)+"\r\n";
+    out+="END:VEVENT\r\n";
+  });
+  out+="END:VCALENDAR\r\n";
+  return out;
+}
+function downloadIcs(fairs,filename){
+  const blob=new Blob([buildIcs(fairs)],{type:"text/calendar;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download=filename;document.body.appendChild(a);a.click();
+  document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+function renderFairs(){
+  const fairsEl=document.getElementById("fairs");
+  fairsEl.innerHTML="";
+  let contCount=0;
+  CONT_ORDER.forEach(cont=>{
+    const items=ALL_FAIRS.filter(f=>continentOf(f)===cont).map(f=>({...f,st:fairStatus(f.s,f.e)}));
+    if(!items.length)return;
+    items.sort((a,b)=>{
+      const au=a.st.k!=="past",bu=b.st.k!=="past";
+      if(au!==bu)return au?-1:1;
+      return au?(a.s<b.s?-1:1):(a.s>b.s?-1:1);
+    });
+    contCount++;
+    const col=document.createElement("div");col.className="fair-col";
+    const head=document.createElement("h3");
+    head.innerHTML=esc(CONT_NAMES[cont][LANG])+' <span class="flag">'+items.length+" "+(items.length===1?t().evt1:t().evtN)+"</span>";
+    col.appendChild(head);
+    const body=document.createElement("div");body.className="fair-list";
+    items.forEach(f=>{
+      const dispYr=(f.disp.match(/20\d\d/))?"":yr(f.s);
+      const row=document.createElement("div");row.className="fair";
+      row.innerHTML=
+        '<a class="row1" href="'+esc(fairUrl(f))+'" target="_blank" rel="noopener" title="'+esc(f.nm)+'">'+
+          '<span class="fdot '+f.st.k+'" aria-hidden="true"></span>'+
+          '<div class="when">'+esc(f.disp)+esc(dispYr)+'</div>'+
+          '<div class="body"><div class="nm">'+esc(f.nm)+'</div>'+
+            '<div class="meta">'+esc(f.loc)+' · <span class="area">'+esc(f.area)+'</span></div>'+
+            '<span class="pill '+f.st.k+'">'+esc(statusText(f.st))+'</span></div>'+
+        '</a>'+
+        '<button class="ics" type="button" title="'+esc(t().addCal)+'" aria-label="'+esc(t().addCal+": "+f.nm)+'">📅</button>';
+      row.querySelector(".ics").addEventListener("click",ev=>{ev.preventDefault();downloadIcs([f],"feira-"+noAccent(f.nm).replace(/[^a-z0-9]+/g,"-")+".ics");});
+      body.appendChild(row);
+    });
+    col.appendChild(body);
+    fairsEl.appendChild(col);
+  });
+  document.getElementById("fair-count").textContent=t().fairCount(ALL_FAIRS.length,contCount);
+}
+document.getElementById("fair-export-all").addEventListener("click",()=>{
+  const upcoming=ALL_FAIRS.filter(f=>fairStatus(f.s,f.e).k!=="past");
+  downloadIcs(upcoming.length?upcoming:ALL_FAIRS,"feiras-tecnologia-2026.ics");
 });
-document.getElementById('fair-count').textContent=ALL_FAIRS.length+' eventos · '+contCount+' continentes';
 
-/* ---------- cotação em tempo real (USD/BRL, EUR/BRL, EUR/USD) ---------- */
-const FX_API='https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,EUR-USD';
-const FX_PAIRS=[
-  {key:'USDBRL',label:'Dólar americano',sub:'USD / BRL',symbol:'R$'},
-  {key:'EURBRL',label:'Euro',sub:'EUR / BRL',symbol:'R$'},
-  {key:'EURUSD',label:'Euro em dólar',sub:'EUR / USD',symbol:'US$'}
-];
+/* ============================================================
+   BUSCA EM LINGUAGEM NATURAL (local + IA opcional)
+   ============================================================ */
+const MONTHS={
+  jan:1,fev:2,mar:3,abr:4,mai:5,jun:6,jul:7,ago:8,set:9,out:10,nov:11,dez:12,
+  janeiro:1,fevereiro:2,marco:3,abril:4,maio:5,junho:6,julho:7,agosto:8,setembro:9,outubro:10,novembro:11,dezembro:12,
+  january:1,february:2,march:3,april:4,may:5,june:6,july:7,august:8,september:9,october:10,november:11,december:12,
+  enero:1,febrero:2,marzo:3,mayo:5,junio:6,julio:7,septiembre:9,octubre:10,noviembre:11,diciembre:12};
+const CONT_KEYS={
+  "América do Sul":["america do sul","south america","sudamerica","america del sur","brasil","brazil"],
+  "América do Norte":["america do norte","north america","norteamerica","eua","usa","estados unidos"],
+  "Europa":["europa","europe"],
+  "Ásia":["asia","ásia"]
+};
+function localAnswer(query){
+  const q=noAccent(query);
+  // continente
+  let cont=null;
+  for(const c in CONT_KEYS){ if(CONT_KEYS[c].some(k=>q.includes(k))){cont=c;break;} }
+  let month=null;
+  for(const m in MONTHS){ if(new RegExp("\\b"+m+"\\b").test(q)){month=MONTHS[m];break;} }
+  // semestre
+  let sem=null; if(/\b(2|ii|segundo)[ºo]?\s*(sem|semestre|half)|\bh2\b/.test(q))sem=2; else if(/\b(1|i|primeiro)[ºo]?\s*(sem|semestre|half)|\bh1\b/.test(q))sem=1;
+  // "agora"
+  const wantNow=/\bagora\b|\bnow\b|\bhoje\b|\btoday\b|en curso|acontecendo/.test(q);
+  // palavras-chave de tema
+  // palavras de tema: removemos conectores, meses, continentes e palavras de intenção
+  const SHORT_OK=new Set(["ia","ai","5g","6g","iot","vr","ar","ev","ti"]);
+  const STOP=new Set([
+    "feira","feiras","fair","fairs","ferias","feria","evento","eventos","event","events",
+    "area","areas","área","áreas","qual","quais","what","which","cual","cuales","cuál","cuáles",
+    "mais","most","biggest","cresce","crescimento","grow","growing","crece","onde","where","donde","dónde",
+    "agora","acontece","acontecendo","now","hoje","today","curso","quando","when","cuando","cuándo",
+    "que","the","of","in","on","de","do","da","dos","das","no","na","nos","nas","em","los","las","del","en",
+    "sobre","about","para","com","with","semestre","semester","half","sem","ano","2026","2027"
+  ]);
+  for(const k in MONTHS) STOP.add(k);
+  for(const c in CONT_KEYS) CONT_KEYS[c].forEach(p=>p.split(/\s+/).forEach(w=>STOP.add(w)));
+  const themeWords=q.split(/[^a-z0-9]+/).filter(w=>w && (w.length>3 || SHORT_OK.has(w)) && !STOP.has(w));
+  const themeHit=(hay,w)=>hay.includes(w) || (w.length>=5 && hay.includes(w.slice(0,5)));
 
-const fxGrid=document.getElementById('fx-grid');
-const intervalSec=30;
+  let fairs=ALL_FAIRS.map(f=>({...f,st:fairStatus(f.s,f.e),cont:continentOf(f)}));
+  if(cont) fairs=fairs.filter(f=>f.cont===cont);
+  if(month) fairs=fairs.filter(f=>Number(f.s.slice(5,7))===month);
+  if(sem) fairs=fairs.filter(f=>{const mm=Number(f.s.slice(5,7));return sem===1?mm<=6:mm>=7;});
+  if(wantNow) fairs=fairs.filter(f=>f.st.k==="now"||f.st.k==="up");
+  if(themeWords.length){
+    fairs=fairs.filter(f=>{const hay=noAccent(f.nm+" "+f.area);return themeWords.some(w=>themeHit(hay,w));});
+  }
+  fairs.sort((a,b)=>a.s<b.s?-1:1);
 
-function fmtN(v,dec){return Number(v).toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec});}
+  // áreas que batem
+  let areas=[];
+  if(/\bcresce|grow|crece|maior|most|biggest|rapid/.test(q)){
+    areas=[...AREAS].sort((a,b)=>b.g-a.g).slice(0,3);
+  }else if(themeWords.length){
+    areas=AREAS.filter(a=>{const hay=noAccent(a.nm[LANG]+" "+a.gq);return themeWords.some(w=>themeHit(hay,w));});
+  }
+  return {fairs:fairs.slice(0,12),areas:areas.slice(0,4)};
+}
+function renderAskResults(res,aiText){
+  const out=document.getElementById("ask-out");
+  out.classList.add("show");
+  let html="";
+  if(aiText){ html+='<div class="ask-ai-tag">'+esc(t().askAiTag)+'</div><div class="ask-ai">'+esc(aiText)+'</div>'; }
+  const hits=[];
+  res.areas.forEach(a=>{
+    hits.push('<a class="ask-hit" href="'+esc(newsUrl(a.gq))+'" target="_blank" rel="noopener">'+
+      '<span class="ah-when">'+(a.est?"~":"")+a.g+"%"+t().perYr+'</span>'+
+      '<span><span class="ah-nm">'+esc(a.nm[LANG])+'</span> <span class="ah-meta">'+esc(a.stat)+'</span></span></a>');
+  });
+  res.fairs.forEach(f=>{
+    hits.push('<a class="ask-hit" href="'+esc(fairUrl(f))+'" target="_blank" rel="noopener">'+
+      '<span class="ah-when">'+esc(f.disp)+'</span>'+
+      '<span><span class="ah-nm">'+esc(f.nm)+'</span> <span class="ah-meta">'+esc(f.loc)+' · '+esc(statusText(f.st))+'</span></span></a>');
+  });
+  if(hits.length){ if(!aiText) html+='<div class="ask-ai-tag">'+esc(t().askLocalTag)+'</div>'; html+='<div class="ask-hits">'+hits.join("")+'</div>'; }
+  else if(!aiText){ html+='<div class="ask-empty">'+esc(t().askNoHits)+'</div>'; }
+  out.innerHTML=html;
+}
+async function runAsk(){
+  const inp=document.getElementById("ask-input");
+  const query=(inp.value||"").trim();
+  if(!query)return;
+  const res=localAnswer(query);
+  // tenta IA no backend; se falhar, mostra só o resultado local
+  const out=document.getElementById("ask-out");
+  out.classList.add("show");
+  out.innerHTML='<div class="ask-empty">'+esc(t().askThinking)+'</div>';
+  let aiText=null;
+  try{
+    const ctx={lang:LANG, fairs:res.fairs.map(f=>({nm:f.nm,disp:f.disp,loc:f.loc,area:f.area,status:statusText(f.st)})), areas:res.areas.map(a=>({nm:a.nm[LANG],stat:a.stat,growth:a.g}))};
+    const r=await fetch(API_BASE+"/api/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q:query,context:ctx})});
+    if(r.ok){const d=await r.json();aiText=(d.answer||"").trim()||null;}
+  }catch(e){ aiText=null; }
+  renderAskResults(res,aiText);
+}
+function buildAskChips(){
+  const wrap=document.getElementById("ask-chips");wrap.innerHTML="";
+  t().askChips.forEach(c=>{
+    const b=document.createElement("button");b.type="button";b.className="ask-chip";b.textContent=c;
+    b.addEventListener("click",()=>{document.getElementById("ask-input").value=c;runAsk();});
+    wrap.appendChild(b);
+  });
+}
+document.getElementById("ask-go").addEventListener("click",runAsk);
+document.getElementById("ask-input").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();runAsk();}});
 
+/* ============================================================
+   COTAÇÃO + estados + contagem regressiva + conversor
+   ============================================================ */
+const fxGrid=document.getElementById("fx-grid");
+let fxTimer=null, fxCountdown=null, fxIntervalSec=30, fxRemaining=30, fxPaused=false, FX_LAST=null;
+
+function fmtN(v,dec){return Number(v).toLocaleString(t().locale,{minimumFractionDigits:dec,maximumFractionDigits:dec});}
+function setFxStatus(state){
+  const dot=document.querySelector("#fx-status .live-dot");
+  const txt=document.getElementById("fx-status-txt");
+  dot.className="live-dot"+(state==="err"?" err":state==="load"?" load":"");
+  txt.textContent=state==="err"?t().fxErr:state==="load"?t().fxLoading:t().fxOk;
+}
 function renderFx(data){
-  fxGrid.innerHTML='';
+  fxGrid.innerHTML="";
   FX_PAIRS.forEach(p=>{
     const d=data[p.key];if(!d)return;
     const chg=parseFloat(d.pctChange)||0,bid=parseFloat(d.bid),ask=parseFloat(d.ask),low=parseFloat(d.low),high=parseFloat(d.high);
-    const cls=chg>0.01?'up':chg<-0.01?'down':'flat';
-    const arrow=cls==='up'?'▲':cls==='down'?'▼':'→';
-    const el=document.createElement('div');el.className='fx-card';
+    const cls=chg>0.01?"up":chg<-0.01?"down":"flat";
+    const arrow=cls==="up"?"▲":cls==="down"?"▼":"→";
+    const el=document.createElement("div");el.className="fx-card";
     el.innerHTML=
-      '<div class="fx-top"><span class="fx-pair">'+esc(p.label)+' <span class="fx-arrow">·</span> '+esc(p.sub)+'</span>'+
-      '<span class="fx-chg '+cls+'">'+arrow+' '+(chg>=0?'+':'')+chg.toFixed(2)+'%</span></div>'+
-      '<div class="fx-val">'+esc(p.symbol)+' '+fmtN(bid,4)+'</div>'+
-      '<div class="fx-sub"><span>Compra <b>'+esc(p.symbol)+' '+fmtN(bid,4)+'</b></span><span>Venda <b>'+esc(p.symbol)+' '+fmtN(ask,4)+'</b></span></div>'+
-      '<div class="fx-range">Mín '+fmtN(low,4)+' · Máx '+fmtN(high,4)+' (dia)</div>';
+      '<div class="fx-top"><span class="fx-pair">'+esc(p.label[LANG])+' <span class="fx-arrow">·</span> '+esc(p.sub)+'</span>'+
+      '<span class="fx-chg '+cls+'">'+arrow+" "+(chg>=0?"+":"")+chg.toFixed(2)+'%</span></div>'+
+      '<div class="fx-val">'+esc(p.symbol)+" "+fmtN(bid,4)+'</div>'+
+      '<div class="fx-sub"><span>'+esc(t().buy)+' <b>'+esc(p.symbol)+" "+fmtN(bid,4)+'</b></span><span>'+esc(t().sell)+' <b>'+esc(p.symbol)+" "+fmtN(ask,4)+'</b></span></div>'+
+      '<div class="fx-range">'+esc(t().dayRange)+": "+fmtN(low,4)+" · "+fmtN(high,4)+'</div>';
     fxGrid.appendChild(el);
   });
 }
-
+function showFxSkeleton(){fxGrid.innerHTML="";for(let i=0;i<FX_PAIRS.length;i++){const s=document.createElement("div");s.className="fx-skel";fxGrid.appendChild(s);}}
 async function fetchFx(){
+  setFxStatus("load");
   try{
-    const c=new AbortController();const t=setTimeout(()=>c.abort(),9000);
-    const r=await fetch(FX_API,{signal:c.signal});clearTimeout(t);
+    const c=new AbortController();const to=setTimeout(()=>c.abort(),9000);
+    const r=await fetch(FX_API,{signal:c.signal,cache:"no-store"});clearTimeout(to);
     if(!r.ok)throw 0;
     const data=await r.json();
+    FX_LAST=data;
     renderFx(data);
-  }catch(e){}
+    setFxStatus("ok");
+    document.getElementById("last-upd").textContent=t().lastUpd+" "+new Intl.DateTimeFormat(t().locale,{hour:"2-digit",minute:"2-digit",second:"2-digit"}).format(new Date());
+    updateConverter();
+  }catch(e){
+    setFxStatus("err");
+  }
+  fxRemaining=fxIntervalSec;
 }
-function fmtCd(s){return s+'s';}
-setInterval(fetchFx,intervalSec*1000);
-fetchFx();
-if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
-</script>
-<script src="fornecedores.js"></script>
-<script>
-(function(){
-  var q=document.getElementById('sup-q');
-  if(!q) return;
-  var CATS=window.CATEGORIAS||{};
-  var BASE=window.SUPPLIERS||[];
-  var LSK='otg_sup_user_v1';
-  function loadUser(){try{return JSON.parse(localStorage.getItem(LSK)||'[]');}catch(e){return [];}}
-  function saveUser(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
-  function all(){return BASE.concat(loadUser());}
-  var esc2=function(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
-  function clean(u){var s=String(u).replace('https://','').replace('http://','');if(s.slice(-1)==='/')s=s.slice(0,-1);return s;}
+function startFxLoop(){
+  if(fxTimer)clearInterval(fxTimer);
+  if(fxCountdown)clearInterval(fxCountdown);
+  fxRemaining=fxIntervalSec;
+  fxTimer=setInterval(()=>{if(!fxPaused)fetchFx();},fxIntervalSec*1000);
+  fxCountdown=setInterval(()=>{
+    if(fxPaused)return;
+    fxRemaining--;if(fxRemaining<0)fxRemaining=fxIntervalSec;
+    document.getElementById("countdown").textContent=fxRemaining+"s";
+  },1000);
+}
+document.getElementById("fx-interval").addEventListener("change",e=>{fxIntervalSec=parseInt(e.target.value,10)||30;startFxLoop();});
+document.getElementById("fx-now").addEventListener("click",()=>fetchFx());
+document.getElementById("fx-pause").addEventListener("click",function(){
+  fxPaused=!fxPaused;
+  this.textContent=fxPaused?t().resume:t().pause;
+  this.classList.toggle("paused",fxPaused);
+  if(!fxPaused){fetchFx();}
+});
 
-  document.getElementById('sup-web').addEventListener('click',function(){
-    var t=(q.value||'').trim();if(!t){q.focus();return;}
-    window.open('https://www.google.com/search?hl=pt-BR&q='+encodeURIComponent(t+' fornecedores fabricantes'),'_blank','noopener');
+/* conversor: matriz BRL como pivô */
+function ratesToBRL(){ // quantos BRL vale 1 unidade de cada moeda
+  if(!FX_LAST)return null;
+  const m={BRL:1};
+  if(FX_LAST.USDBRL)m.USD=parseFloat(FX_LAST.USDBRL.bid);
+  if(FX_LAST.EURBRL)m.EUR=parseFloat(FX_LAST.EURBRL.bid);
+  if(FX_LAST.CNYBRL)m.CNY=parseFloat(FX_LAST.CNYBRL.bid);
+  return m;
+}
+const CONV_CODES=[{c:"BRL",n:"R$ BRL"},{c:"USD",n:"US$ USD"},{c:"EUR",n:"€ EUR"},{c:"CNY",n:"¥ CNY"}];
+function fillConvSelects(){
+  const from=document.getElementById("conv-from"),to=document.getElementById("conv-to");
+  const fv=from.value||"USD", tv=to.value||"BRL";
+  [from,to].forEach(sel=>{sel.innerHTML="";CONV_CODES.forEach(o=>{const e=document.createElement("option");e.value=o.c;e.textContent=o.n;sel.appendChild(e);});});
+  from.value=fv;to.value=tv;
+}
+function updateConverter(){
+  const m=ratesToBRL();const note=document.getElementById("conv-note");const outEl=document.getElementById("conv-out");
+  if(!m){outEl.textContent="—";note.textContent=t().convWait;return;}
+  const amt=parseFloat(document.getElementById("conv-amt").value)||0;
+  const from=document.getElementById("conv-from").value,to=document.getElementById("conv-to").value;
+  if(!m[from]||!m[to]){outEl.textContent="—";return;}
+  const inBRL=amt*m[from];const result=inBRL/m[to];
+  const sym={BRL:"R$",USD:"US$",EUR:"€",CNY:"¥"}[to]||"";
+  outEl.textContent=sym+" "+result.toLocaleString(t().locale,{minimumFractionDigits:2,maximumFractionDigits:2});
+  note.textContent=t().convNote;
+}
+["conv-amt","conv-from","conv-to"].forEach(id=>document.getElementById(id).addEventListener("input",updateConverter));
+
+/* ============================================================
+   FORNECEDORES (backend compartilhado + fallback local)
+   ============================================================ */
+(function suppliers(){
+  const q=document.getElementById("sup-q");
+  if(!q)return;
+  const CATS=window.CATEGORIAS||{};
+  let BASE=window.SUPPLIERS||[];
+  let SHARED=[]; // vindos do backend
+  const LSK="otg_sup_user_v1";
+  function loadUser(){try{return JSON.parse(localStorage.getItem(LSK)||"[]");}catch(e){return [];}}
+  function saveUser(a){try{localStorage.setItem(LSK,JSON.stringify(a));}catch(e){}}
+  function all(){return BASE.concat(SHARED).concat(loadUser());}
+  const esc2=esc;
+  function clean(u){var s=String(u).replace("https://","").replace("http://","");if(s.slice(-1)==="/")s=s.slice(0,-1);return s;}
+
+  // tenta carregar catálogo compartilhado do backend
+  (async function loadShared(){
+    try{
+      const r=await fetch(API_BASE+"/api/suppliers",{cache:"no-store"});
+      if(r.ok){const d=await r.json();SHARED=(d.items||[]).map(x=>({...x,_shared:true}));rebuildFilters();if(!catalog.hidden)render();}
+    }catch(e){}
+    updateOriginNote();
+  })();
+  function updateOriginNote(){
+    const el=document.getElementById("sup-origin-note");
+    el.textContent=(BASE.length+SHARED.length)+" + "+loadUser().length;
+  }
+
+  document.getElementById("sup-web").addEventListener("click",function(){
+    var v=(q.value||"").trim();if(!v){q.focus();return;}
+    window.open("https://www.google.com/search?hl="+t().locale+"&q="+encodeURIComponent(v+" fornecedores fabricantes"),"_blank","noopener");
   });
 
-  var catalog=document.getElementById('sup-catalog');
-  var list=document.getElementById('sup-list');
-  var cnt=document.getElementById('sup-cnt');
-  var fcat=document.getElementById('sup-fcat');
-  var fcountry=document.getElementById('sup-fcountry');
+  const catalog=document.getElementById("sup-catalog");
+  const list=document.getElementById("sup-list");
+  const cnt=document.getElementById("sup-cnt");
+  const fcat=document.getElementById("sup-fcat");
+  const fcountry=document.getElementById("sup-fcountry");
 
-  function fillSelect(sel,opts,first){sel.innerHTML='';var o0=document.createElement('option');o0.value='';o0.textContent=first;sel.appendChild(o0);opts.forEach(function(o){var e=document.createElement('option');e.value=o.v;e.textContent=o.t;sel.appendChild(e);});}
+  function fillSelect(sel,opts,first){sel.innerHTML="";var o0=document.createElement("option");o0.value="";o0.textContent=first;sel.appendChild(o0);opts.forEach(function(o){var e=document.createElement("option");e.value=o.v;e.textContent=o.t;sel.appendChild(e);});}
   function catOpts(){return Object.keys(CATS).map(function(k){return {v:k,t:CATS[k]};});}
-  function countryOpts(){var cs=[];all().forEach(function(s){if(s.pais&&cs.indexOf(s.pais)<0)cs.push(s.pais);});cs.sort(function(a,b){if(a==='Brasil')return -1;if(b==='Brasil')return 1;return a.localeCompare(b,'pt-BR');});return cs.map(function(c){return {v:c,t:c};});}
-  fillSelect(fcat,catOpts(),'Todas as categorias');
-  fillSelect(fcountry,countryOpts(),'Todos os países');
-  fcat.addEventListener('change',render);
-  fcountry.addEventListener('change',render);
+  function countryOpts(){var cs=[];all().forEach(function(s){if(s.pais&&cs.indexOf(s.pais)<0)cs.push(s.pais);});cs.sort(function(a,b){if(a==="Brasil")return -1;if(b==="Brasil")return 1;return a.localeCompare(b,"pt-BR");});return cs.map(function(c){return {v:c,t:c};});}
+  function rebuildFilters(){const cf=fcat.value,cc=fcountry.value;fillSelect(fcat,catOpts(),t().allCats);fillSelect(fcountry,countryOpts(),t().allCountries);fcat.value=cf;fcountry.value=cc;updateOriginNote();}
+  rebuildFilters();
+  fcat.addEventListener("change",render);
+  fcountry.addEventListener("change",render);
 
   function showCatalog(){catalog.hidden=false;render();}
-  document.getElementById('sup-cat').addEventListener('click',function(){if(catalog.hidden){catalog.hidden=false;render();}else{catalog.hidden=true;}});
-  q.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();showCatalog();}});
+  document.getElementById("sup-cat").addEventListener("click",function(){if(catalog.hidden){showCatalog();}else{catalog.hidden=true;}});
+  q.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();showCatalog();}});
 
   function matches(s){
-    var t=(q.value||'').toLowerCase().trim();
+    var v=(q.value||"").toLowerCase().trim();
     if(fcat.value && (s.cats||[]).indexOf(fcat.value)<0) return false;
     if(fcountry.value && s.pais!==fcountry.value) return false;
-    if(t){var hay=(s.nm+' '+(s.tag||'')+' '+(s.pais||'')).toLowerCase();if(hay.indexOf(t)<0)return false;}
+    if(v){var hay=(s.nm+" "+(s.tag||"")+" "+(s.pais||"")).toLowerCase();if(hay.indexOf(v)<0)return false;}
     return true;
   }
   function card(s){
-    var a=document.createElement('a');a.className='sup-card';a.href=s.url;a.target='_blank';a.rel='noopener';
-    var html='<div class="sup-nmrow"><span class="sup-nm">'+esc2(s.nm)+'</span><span class="sup-badge">'+esc2(s.pais||'')+'</span></div>'+
-             '<div class="sup-tag">'+esc2(s.tag||'')+'</div>'+
+    var a=document.createElement("a");a.className="sup-card";a.href=s.url;a.target="_blank";a.rel="noopener";
+    var html='<div class="sup-nmrow"><span class="sup-nm">'+esc2(s.nm)+'</span><span class="sup-badge">'+esc2(s.pais||"")+'</span></div>'+
+             '<div class="sup-tag">'+esc2(s.tag||"")+'</div>'+
              '<div class="sup-site">↗ '+esc2(clean(s.url))+'</div>';
     if(s.contato) html+='<div class="sup-contact">'+esc2(s.contato)+'</div>';
+    if(s._shared) html+='<div class="sup-origin shared">● '+esc2(t().originShared)+'</div>';
+    else if(s._user) html+='<div class="sup-origin">● '+esc2(t().originLocal)+'</div>';
     a.innerHTML=html;
-    if(s._user){var r=document.createElement('span');r.className='sup-remove';r.textContent='✕ remover';r.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var u=loadUser().filter(function(x){return x.id!==s.id;});saveUser(u);fillSelect(fcountry,countryOpts(),'Todos os países');render();});a.appendChild(r);}
+    if(s._user){var rm=document.createElement("span");rm.className="sup-remove";rm.textContent=t().remove;rm.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();var u=loadUser().filter(function(x){return x.id!==s.id;});saveUser(u);rebuildFilters();render();});a.appendChild(rm);}
     return a;
   }
   function render(){
     var data=all().filter(matches);
-    list.innerHTML='';
-    if(cnt) cnt.textContent=data.length+' fornecedor'+(data.length===1?'':'es');
-    if(!data.length){var p=document.createElement('div');p.className='sup-note';p.textContent='Nenhum fornecedor com esses filtros.';list.appendChild(p);return;}
+    list.innerHTML="";
+    if(cnt) cnt.textContent=t().supCount(data.length);
+    if(!data.length){var p=document.createElement("div");p.className="sup-note";p.textContent=t().supNoneFilter;list.appendChild(p);return;}
     var keys=fcat.value?[fcat.value]:Object.keys(CATS);
     keys.forEach(function(k){
       var items=data.filter(function(s){return (s.cats||[]).indexOf(k)>=0;});
       if(!items.length) return;
-      var wrap=document.createElement('div');wrap.className='sup-cty';
-      var hh=document.createElement('h4');hh.innerHTML=esc2(CATS[k]||k)+' <span class="flag">'+items.length+'</span>';wrap.appendChild(hh);
-      var g=document.createElement('div');g.className='sup-grid';items.forEach(function(s){g.appendChild(card(s));});
+      var wrap=document.createElement("div");wrap.className="sup-cty";
+      var hh=document.createElement("h4");hh.innerHTML=esc2(CATS[k]||k)+' <span class="flag">'+items.length+"</span>";wrap.appendChild(hh);
+      var g=document.createElement("div");g.className="sup-grid";items.forEach(function(s){g.appendChild(card(s));});
       wrap.appendChild(g);list.appendChild(wrap);
     });
     if(!fcat.value){
       var rest=data.filter(function(s){return !(s.cats||[]).some(function(c){return CATS[c];});});
-      if(rest.length){var wrap=document.createElement('div');wrap.className='sup-cty';var hh=document.createElement('h4');hh.innerHTML='Outros <span class="flag">'+rest.length+'</span>';wrap.appendChild(hh);var g=document.createElement('div');g.className='sup-grid';rest.forEach(function(s){g.appendChild(card(s));});wrap.appendChild(g);list.appendChild(wrap);}
+      if(rest.length){var wrap=document.createElement("div");wrap.className="sup-cty";var hh=document.createElement("h4");hh.innerHTML="•••";wrap.appendChild(hh);var g=document.createElement("div");g.className="sup-grid";rest.forEach(function(s){g.appendChild(card(s));});wrap.appendChild(g);list.appendChild(wrap);}
     }
   }
 
   /* incluir fornecedor */
-  var form=document.getElementById('sup-form');
-  var fcatForm=document.getElementById('f-cat');
-  fillSelect(fcatForm,catOpts(),'Categoria…');
-  document.getElementById('sup-add').addEventListener('click',function(){form.hidden=!form.hidden;});
-  document.getElementById('f-cancel').addEventListener('click',function(){form.hidden=true;});
+  var form=document.getElementById("sup-form");
+  var fcatForm=document.getElementById("f-cat");
+  function refreshFormCats(){fillSelect(fcatForm,catOpts(),t().fCat);}
+  refreshFormCats();
+  document.getElementById("sup-add").addEventListener("click",function(){form.hidden=!form.hidden;});
+  document.getElementById("f-cancel").addEventListener("click",function(){form.hidden=true;});
   function readForm(){return {
-    nm:(document.getElementById('f-nm').value||'').trim(),
-    pais:(document.getElementById('f-pais').value||'').trim(),
+    nm:(document.getElementById("f-nm").value||"").trim(),
+    pais:(document.getElementById("f-pais").value||"").trim(),
     cat:fcatForm.value,
-    site:(document.getElementById('f-site').value||'').trim(),
-    tag:(document.getElementById('f-tag').value||'').trim(),
-    contato:(document.getElementById('f-contato').value||'').trim()
+    site:(document.getElementById("f-site").value||"").trim(),
+    tag:(document.getElementById("f-tag").value||"").trim(),
+    contato:(document.getElementById("f-contato").value||"").trim()
   };}
-  function msg(t){document.getElementById('f-msg').textContent=t;}
-  function norm(u){return /^https?:\/\//.test(u)?u:('https://'+u);}
-  document.getElementById('f-save').addEventListener('click',function(){
+  function msg(s){document.getElementById("f-msg").textContent=s;}
+  function norm(u){return /^https?:\/\//.test(u)?u:("https://"+u);}
+  function clearForm(){["f-nm","f-pais","f-site","f-tag","f-contato"].forEach(function(id){document.getElementById(id).value="";});fcatForm.value="";}
+
+  document.getElementById("f-save").addEventListener("click",function(){
     var d=readForm();
-    if(!d.nm||!d.site){msg('Preencha ao menos Nome e Site.');return;}
-    var obj={id:'u'+Date.now(),nm:d.nm,pais:d.pais,cats:d.cat?[d.cat]:[],tag:d.tag,url:norm(d.site),contato:d.contato,_user:true};
+    if(!d.nm||!d.site){msg(t().fNeed);return;}
+    var obj={id:"u"+Date.now(),nm:d.nm,pais:d.pais,cats:d.cat?[d.cat]:[],tag:d.tag,url:norm(d.site),contato:d.contato,_user:true};
     var u=loadUser();u.push(obj);saveUser(u);
-    ['f-nm','f-pais','f-site','f-tag','f-contato'].forEach(function(id){document.getElementById(id).value='';});
-    fcatForm.value='';
-    fillSelect(fcountry,countryOpts(),'Todos os países');
-    form.hidden=true;showCatalog();
-    msg('Fornecedor adicionado (salvo neste navegador).');
+    clearForm();rebuildFilters();form.hidden=true;showCatalog();
+    msg(t().fSavedLocal);
   });
-  document.getElementById('f-copy').addEventListener('click',function(){
+  document.getElementById("f-share").addEventListener("click",async function(){
     var d=readForm();
-    if(!d.nm||!d.site){msg('Preencha ao menos Nome e Site para gerar o código.');return;}
-    function q2(s){return '"'+String(s).replace(/"/g,'\\"')+'"';}
-    var line='  {nm:'+q2(d.nm)+', pais:'+q2(d.pais)+', cats:['+(d.cat?q2(d.cat):'')+'], tag:'+q2(d.tag)+', url:'+q2(norm(d.site))+', contato:'+q2(d.contato)+'},';
-    copyText(line);
+    if(!d.nm||!d.site){msg(t().fNeed);return;}
+    var obj={nm:d.nm,pais:d.pais,cats:d.cat?[d.cat]:[],tag:d.tag,url:norm(d.site),contato:d.contato};
+    try{
+      var r=await fetch(API_BASE+"/api/suppliers",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(obj)});
+      if(!r.ok)throw 0;
+      var saved=await r.json();
+      SHARED.push({...(saved.item||obj),_shared:true});
+      clearForm();rebuildFilters();form.hidden=true;showCatalog();
+      msg(t().fShared);
+    }catch(e){
+      // fallback: salva local
+      var local={id:"u"+Date.now(),...obj,_user:true};var u=loadUser();u.push(local);saveUser(u);
+      clearForm();rebuildFilters();form.hidden=true;showCatalog();
+      msg(t().fShareOffline);
+    }
   });
-  function copyText(t){
-    function ok(){msg('Código copiado! Cole dentro de window.SUPPLIERS, no fornecedores.js.');}
-    function fb(){var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok();}catch(e){msg('Copie manualmente: '+t);}document.body.removeChild(ta);}
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,fb);}else{fb();}
-  }
+
+  // reexpor para troca de idioma
+  window.__supRefresh=function(){rebuildFilters();refreshFormCats();if(!catalog.hidden)render();};
 })();
+
+/* ============================================================
+   i18n — aplicar e trocar idioma
+   ============================================================ */
+function applyI18n(){
+  document.documentElement.lang=t().locale;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{const k=el.getAttribute("data-i18n");if(typeof t()[k]==="string")el.textContent=t()[k];});
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{const k=el.getAttribute("data-i18n-ph");if(t()[k])el.setAttribute("placeholder",t()[k]);});
+  document.querySelectorAll(".lang-switch button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===LANG?"true":"false"));
+  renderPulse();renderAreas();renderFairs();buildAskChips();
+  if(FX_LAST){renderFx(FX_LAST);}
+  fillConvSelects();updateConverter();
+  if(window.__supRefresh)window.__supRefresh();
+  document.getElementById("fx-pause").textContent=fxPaused?t().resume:t().pause;
+  tick();
+}
+document.querySelectorAll(".lang-switch button").forEach(b=>{
+  b.addEventListener("click",()=>{LANG=b.dataset.lang;try{localStorage.setItem("otg_lang",LANG);}catch(e){}applyI18n();});
+});
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+fillConvSelects();
+applyI18n();
+showFxSkeleton();
+fetchFx();
+startFxLoop();
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});}
 </script>
 
 </body>

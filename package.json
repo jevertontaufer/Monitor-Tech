@@ -1,14 +1,16 @@
 {
-  "name": "monitor-tecnologia",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Monitor de Tecnologia Global — feiras, áreas e notícias ao vivo em pt-BR",
-  "type": "module",
-  "main": "tech-server.js",
+  "name": "observatorio-tecnologia-global",
+  "version": "2.0.0",
+  "description": "Observatório de Tecnologia Global — site + backend (fornecedores compartilhados, notícias, cotação e IA).",
+  "main": "server.js",
+  "type": "commonjs",
   "scripts": {
-    "start": "node tech-server.js"
+    "start": "node server.js"
   },
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.22.2"
   }
 }
